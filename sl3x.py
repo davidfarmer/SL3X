@@ -285,12 +285,14 @@ makeoutput.section_links_on_chapterpages()
 makeoutput.chapter_section_files()
 makeoutput.top_level_page()
 
-makeoutput.make_knowls_from_labels()
+if component.target == "html":
+    makeoutput.make_knowls_from_labels()
 
 if component.index:
     makeoutput.indexpage()
 
-makeoutput.make_other_knowls()
+if component.target == "html":
+    makeoutput.make_other_knowls()
 
 logging.info("total number of sections: %s", component.totalnumberofsections)
 

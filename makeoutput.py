@@ -2336,12 +2336,14 @@ def chapter_section_files():
                 this_page = postprocess.ptx_remove_empty_tags(this_page)
        # need a flag for when to do this
      #           this_page = postprocess.apex_exercise_group(this_page)
-            try:
-                this_page = this_page.decode('utf-8', errors='replace')
-            except UnicodeEncodeError:
-                logging.warning("FONT ERROR in this_page %s : %s", filename, this_page[:40])
-            except AttributeError:
-                print("Error with utf-8 decode")
+
+# no longer needed for python3?
+#            try:
+#                this_page = this_page.decode('utf-8', errors='replace')
+#            except UnicodeEncodeError:
+#                logging.warning("FONT ERROR in this_page %s : %s", filename, this_page[:40])
+#            except AttributeError:
+#                print("Error with utf-8 decode")
 
             thefile.write(this_page)
 
@@ -2861,14 +2863,16 @@ def saveoutputfile(filename,filecontents):
 #    if filename.startswith("biblio"):
 #        print filecontents[:175]
 #        print filecontents[6000:6075]
-    try:
-        filecontents = filecontents.decode('utf-8',errors='replace')
-    except UnicodeEncodeError:
-        logging.warning("FONT ERROR in %s", filename)
-        filecontents = utilities.other_alphabets_to_latex(filecontents)
-        #filecontents = filecontents.encode('utf-8',errors='ignore')
-    except AttributeError:
-        print("Error with utf-8 decode")
+
+# no longer needed for python3?
+#    try:
+#        filecontents = filecontents.decode('utf-8',errors='replace')
+#    except UnicodeEncodeError:
+#        logging.warning("FONT ERROR in %s", filename)
+#        filecontents = utilities.other_alphabets_to_latex(filecontents)
+#        #filecontents = filecontents.encode('utf-8',errors='ignore')
+#    except AttributeError:
+#        print("Error with utf-8 decode")
     filecontents = utilities.other_alphabets_to_latex(filecontents)
     thefile = codecs.open(fullfilename,"w", "utf-8")
     thefile.write(filecontents)

@@ -298,14 +298,13 @@ def processbibitem(txt):
 
     bibfilename = component.outputdirectory + "/" + utilities.safe_name(thekey, idname=True) + ".knowl"
 
-    # rewrite this using 'with'
     try:
-        bibfile = codecs.open(bibfilename,'w', 'utf-8')
 
-        try:
-            theentry = theentry.decode('utf-8',errors='replace')
-        except UnicodeEncodeError:
-            logging.warning("font encoding issue in theentry: %s", theentry)
+# no longer needed for python3?
+#        try:
+#            theentry = theentry.decode('utf-8',errors='replace')
+#        except UnicodeEncodeError:
+#            logging.warning("font encoding issue in theentry: %s", theentry)
 
         theentry = re.sub("("+component.sha1heads_all+")([0-9a-f]{40})END",
                                       makeoutput.expandhtml,theentry)
@@ -315,9 +314,13 @@ def processbibitem(txt):
         theentry_html = utilities.remove_silly_brackets(theentry_html)
 
     #    bibfile.write(theentry_html + makeoutput.arxivabstract(thekey,theentry))
-        bibfile.write(theentry_html)
-        bibfile.write(makeoutput.arxivabstract(thekey,theentry))
-        bibfile.close()
+        if component.target == "html":
+
+    # rewrite this using 'with'
+          bibfile = codecs.open(bibfilename,'w', 'utf-8')
+          bibfile.write(theentry_html)
+          bibfile.write(makeoutput.arxivabstract(thekey,theentry))
+          bibfile.close()
 
     except IOError:
         logging.error("problem opening bibfile: %s", bibfilename)
