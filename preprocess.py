@@ -325,6 +325,10 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"(\\begin{(practice|example|principle|problem)}){([^{}]+)}", r"\\\1[\3]", newtext)
         newtext = re.sub(r"{marginfigure}", r"{figure}", newtext)
 
+    if component.writer.lower() in ["geodesics"]:
+        newtext = re.sub(r"{\\it ", r"\\talics{", newtext)
+        newtext = utilities.replacemacro(newtext,"talics",1,"#1")
+
     if component.writer.lower() in ["gentop"]:
         newtext = re.sub(r"{\\ss}", "ss", newtext)
         newtext = re.sub(r"{\\bf Point to ponder:}(.*)", r"\\begin{problem}\1\\end{problem}", newtext)

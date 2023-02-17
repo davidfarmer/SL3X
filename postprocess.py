@@ -25,7 +25,7 @@ def ptx_wrap_statements(text):
 
     thetext = text
 
-    for tag in ('theorem|proposition|lemma|corollary|definition|axiom','example','exercise','problem','question'):
+    for tag in ('theorem|proposition|lemma|corollary|definition|axiom','example','exercise','problem','question', 'conjecture'):
         find_env = r"\s*<(" + tag + r")\b([^>]*)>\s*(.*?)\s*</\s*(" + tag + r")\s*>\s*"
         thetext = re.sub(find_env, ptx_wrap_state, thetext, 0, re.DOTALL)
 
@@ -416,6 +416,9 @@ def ptx_fix_various_tags(text):  # including particular authors
 
     if component.writer == "zbornik":
         the_text = re.sub(r'\\itemtitle{([^{}]*)}', r'<title>\1</title>', the_text)
+
+    if component.writer == "geodesics":
+        the_text = re.sub(r'<term>([^ <>]+ [^ <>]+ [^ <>]+ .*?)</term>', r"\1", the_text, 0, re.DOTALL)
 
     if component.writer == "thron":
         the_text = re.sub(r'\\vvideohref{[^{}]+?list=([^&{}]+)&*[^{}]*}(</title>)',
