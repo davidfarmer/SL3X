@@ -360,9 +360,9 @@ def convert_archaic_tex(text):
 
     newtext = re.sub(r"\\mathds\b",r"\\mathbb",newtext)  # mathds is from the dsfont package.  seems pretty useless to me.
 
-    newtext = re.sub(r"\\define\b",r"\\def",newtext)
-    newtext = re.sub(r"\\redefine\b",r"\\def",newtext)
-    newtext = re.sub(r"\\predefine\b",r"\\def",newtext)
+    newtext = re.sub(r"\\define(\\|{)",r"\\def\1",newtext)
+    newtext = re.sub(r"\\redefine(\\|{)",r"\\def\1",newtext)
+    newtext = re.sub(r"\\predefine(\\|{)",r"\\def\1",newtext)
     newtext = re.sub(r"\\heading\b\s*(.*?)\s*\\endheading",r"\\section*{\1}",newtext)
 
     newtext = re.sub(r"\\begin{section}",r"\\section",newtext)
