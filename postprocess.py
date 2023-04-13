@@ -414,6 +414,9 @@ def ptx_fix_various_tags(text):  # including particular authors
 #        the_text = re.sub(r"\\'e", r"é", the_text)
 #        the_text = re.sub(r"\\`e", r"è", the_text)
 
+    if component.writer == "austin":
+        the_text = re.sub(r'\\cite{([^{}]*)}', r'<xref ref="\1"/>', the_text)
+
     if component.writer == "zbornik":
         the_text = re.sub(r'\\itemtitle{([^{}]*)}', r'<title>\1</title>', the_text)
 

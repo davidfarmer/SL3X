@@ -255,11 +255,17 @@ processenvironments.space_after_lessthan()
 processenvironments.expand_text_macros()
 dandr.process_subfigures_to_html()
 makeoutput.tables_to_html()
-makeoutput.cite_and_ref_to_html()
+
+if component.target == "html" or True:
+    makeoutput.cite_and_ref_to_html()
+
 dandr.convert_non_mathjax_math()
+
+#  this funciton separate html and ptx if component.target == "html":
 dandr.convert_tex_markup_to_html()  # operates on component.target
 
-processenvironments.preprocess_terminology()
+if component.target == "html":
+    processenvironments.preprocess_terminology()
 
 # Step 3)  Recursively expand all the sha1 codes
 # and wrap them in the appropriate tags

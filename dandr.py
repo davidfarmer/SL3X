@@ -41,7 +41,7 @@ def initial_preparations(text):
    # BUT, we have to do some conversion for particular authors
    # in order to have the right conditionals in the ifthenelse
     thetext = preprocess.conversion_for_particular_authors(thetext)
-
+    print("foncerted particular for", component.writer.lower(), component.writer.lower() in ["austin"]);
     thetext = ifthenelse(thetext)
 
    # Since a verbatim environment could contain comments which
@@ -125,14 +125,15 @@ def expand_input_files():
     file_count = 0
     utilities.something_changed_file = 1
     while utilities.something_changed_file:
-        logging.info("looking for an input file")
+        logging.info("looking for an input file", separatecomponents.input_and_preprocess_a_file)
         utilities.something_changed_file = 0
+        logging.info("nnnothing");
         component.documentcontents = re.sub(
            #   r"\s\\(include|input|import)\*?\s*{([^}]+)}",
               r"\\(include|input|import)\*?\s*{([^{}]+)}",
               separatecomponents.input_and_preprocess_a_file,
               component.documentcontents,1)
-        logging.debug("trid looking for input{...} %s", utilities.something_changed_file)
+        logging.debug("trid looking for input{...} %s")
         # should we do this with just one regular expression?
         # probably that would be asking for trouble
         component.documentcontents = re.sub(
@@ -951,13 +952,14 @@ def convert_tex_markup_to_html():
                 thetext = utilities.tex_to_html_fonts(thetext)
                 thetext = utilities.tex_to_html_alphabets(thetext)
                 thetext = utilities.remove_silly_brackets(thetext)
+                thetext = utilities.tex_to_html_text_only(thetext)
             elif component.target == 'ptx':
-                thetext = utilities.tex_to_ptx_fonts(thetext)
-                thetext = utilities.tex_to_ptx_alphabets(thetext)
-           # need to put this back once we decide how to not apply it to tikz
-           #     thetext = utilities.remove_silly_brackets(thetext)
+                thetext = utilities.tex_to_ptx(thetext)
+         #       thetext = utilities.tex_to_ptx_fonts(thetext)
+         #       thetext = utilities.tex_to_ptx_alphabets(thetext)
+         #  # need to put this back once we decide how to not apply it to tikz
+         #  #     thetext = utilities.remove_silly_brackets(thetext)
  
-            thetext = utilities.tex_to_html_text_only(thetext)
 
 # note when refactoring:
 # make a clear divide between replacing latexx by HTML,

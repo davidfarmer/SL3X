@@ -91,6 +91,7 @@ def input_and_preprocess_a_file(txt, preprocess=True):
 
     utilities.something_changed_file += 1
 
+    logging.info("input_and_preprocess_a_file", txt, "\n")
     filestub = txt.group(2).strip()
     if "." in filestub and filestub.endswith(('bib','bbl')):   # a hack because I am doing bibliographies stupidly
         filename = filestub
@@ -158,12 +159,13 @@ def input_and_preprocess_a_file(txt, preprocess=True):
         logging.debug("preprocess, initial_preparations")
         newcontents = dandr.initial_preparations(newcontents)
 
-    try:
-        newcontents = newcontents.encode('utf-8', errors="ignore")
-    except UnicodeDecodeError:
-        logging.critical("font encoding problem with %s", component.inputfilename)
+#    try:
+#        logging.debug("trying utf-8 encoding");
+#        newcontents = newcontents.encode('utf-8', errors="ignore")
+#    except UnicodeDecodeError:
+#        logging.critical("font encoding problem with %s", component.inputfilename)
 
-    logging.debug("leaving input_and_preprocess_a_file")
+    logging.debug("leaving input_and_preprocess_a_file", newcontents)
 
     return newcontents
 

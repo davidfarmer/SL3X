@@ -310,6 +310,9 @@ def cite_to_knowl(text, link=True):
 
     """
 
+    # this is abad hack, because I could not find where this was beign called incorrectly
+    if component.target == 'ptx':
+        return text
  ###  need to make this like ref_to_knowl.  Why do we use something_else_changed here,
  ###  but not in ref_to_knowl?
     logging.debug("process cite to knowl: %s", text[:20])
@@ -805,8 +808,9 @@ def tagsandheading(sha1key, target="html"):
         squaregroup = comp['sqgroup']
         this_star = comp['star']
         title = squaregroup
-        title = ref_to_knowl(title,link=False)
-        title = cite_to_knowl(title,link=False)
+        if target == "html":
+            title = ref_to_knowl(title,link=False)
+            title = cite_to_knowl(title,link=False)
         logging.debug("here, and target is %s", target)
         if target == "html":
             opening_tag = '\n<article class="'+theclass+'-like" id="' + thisID + '">'
@@ -1039,8 +1043,9 @@ def tagsandheading(sha1key, target="html"):
         title = squaregroup
         if title.startswith("of "):
             title = "Proof " + title
-        title = ref_to_knowl(title,link=False)
-        title = cite_to_knowl(title,link=False)
+        if target == "html":
+            title = ref_to_knowl(title,link=False)
+            title = cite_to_knowl(title,link=False)
         if component.target == 'html':
             opening_tag = '\n<article class="'+'proof'+'" id="' + thisID + '">'
             closing_tag = '\n</article>\n'
@@ -2451,6 +2456,11 @@ def top_level_page():
             theheader += r'\usepackage{pgfplots}' + "\n"
             theheader += "\n" + "</latex-image-preamble>" + "\n"
 
+        if component.publisher == "aimpl":
+            theheader += '<rename element="openproblem">Problem</rename>' + '\n'
+            theheader += '<rename element="openquestion">Question</rename>' + '\n'
+            theheader += '<rename element="openconjecture">Conjecture</rename>' + '\n'
+
         if component.writer == 'apex':
             theheader += '\n<rename element="insight" lang="en-US">Key Idea</rename>\n'
         elif component.writer == 'active':
@@ -2644,7 +2654,7 @@ def make_terminology_links():
             # symmetry/symmetries
             elif  this_item.endswith("y") and this_item[-2] not in "aeiou":
                 this_item_nospace = this_item_nospace[:-1]
-                search_string_start = r"\s" + re.sub(r"\s+",r"\s+",this_item[:-1])
+                search_string_start = r"\s" + re.sub(r"\s+",r"\\s+",this_item[:-1])
                 search_string_plural = r"((y|ies))"
 
             replace_string = " " + '<span class="autoterm">'

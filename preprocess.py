@@ -243,6 +243,13 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\$\\Box\$", "", newtext)
 
 
+    if component.writer.lower() in ["austin"]:
+    #    newtext = re.sub(r"textbf", r"term", newtext)
+        newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
+        newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
+        newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
+        newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
+
     if component.writer.lower() in ["cremona"]:
         logging.warning("author-specific conversion for %s", component.writer)
         component.counter['section'] = -1  # his book has sections, not chapters
@@ -326,7 +333,7 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"{marginfigure}", r"{figure}", newtext)
 
     if component.writer.lower() in ["geodesics"]:
-        newtext = re.sub(r"{\\it ", r"\\talics{", newtext)
+        newtext = re.sub(r"{ *\\it\s+", r"\\talics{", newtext)
         newtext = utilities.replacemacro(newtext,"talics",1,"#1")
 
     if component.writer.lower() in ["gentop"]:
