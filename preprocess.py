@@ -2357,7 +2357,6 @@ def latexconvert(text):
     # so maybe we don't need to do it here?
     newtext = utilities.environment_shortcuts(newtext)
     newtext = utilities.delete_formatting(newtext)
-
     if component.target == 'html':
      #   newtext = re.sub(r"\\autoref\b",r"\\ref",newtext)  # later should implement autoref properly
         pass  # autoref handled properly later by processenvironments.expand_smart_references

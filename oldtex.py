@@ -136,14 +136,14 @@ def convert_archaic_tex(text):
         the_sub =  r"\\" + "(" + letter + ")" + r"up"
         logging.debug("Greek letters up:" + the_sub)
    #     newtext = re.sub(the_sub, r"\\\1",newtext,re.I)
-        newtext = re.sub(the_sub, r"\\\1",newtext)
-        if letter != "epsilon":
-            the_sub =  r"\\" +"var" + "(" + letter + ")"
-            newtext = re.sub(the_sub,r"\\\1",newtext)
-        the_sub =  r"\\" +"v" + "(" + letter + ")"
-        newtext = re.sub(the_sub,r"\\\1",newtext)
-        the_sub =  r"\\" +"s" + "(" + letter + ")"
-        newtext = re.sub(the_sub,r"\\\1",newtext)
+#        newtext = re.sub(the_sub, r"\\\1",newtext)
+#        if letter != "epsilon":
+#            the_sub =  r"\\" +"var" + "(" + letter + ")"
+#            newtext = re.sub(the_sub,r"\\\1",newtext)
+#        the_sub =  r"\\" +"v" + "(" + letter + ")"
+#        newtext = re.sub(the_sub,r"\\\1",newtext)
+#        the_sub =  r"\\" +"s" + "(" + letter + ")"
+#        newtext = re.sub(the_sub,r"\\\1",newtext)
 
     # macros that are not really archaic, but are not needed for HTML
     newtext = utilities.replacemacro(newtext,"maxtocdepth",1,"")
@@ -337,6 +337,11 @@ def convert_archaic_tex(text):
     newtext = utilities.replacemacro(newtext,"raisebox",2,"#2")
 
     newtext = re.sub(r"\\FloatBarrier\b",r"",newtext)
+    newtext = utilities.replacemacro(newtext,"floatstyle",1,"")
+    newtext = utilities.replacemacro(newtext,"restylefloat",1,"")
+    newtext = re.sub(r"\\hrulefill\b",r"",newtext)
+
+    newtext = utilities.replacemacro(newtext,"resizebox",3,"#3")
 
     newtext = re.sub(r"\\\\\s*\[[0-9]+(pt|in|cm)\]",r"\\\\",newtext)
     newtext = re.sub(r"\\\\\s*\[[0-9]+(pt|in|cm)\]",r"\\\\",newtext)

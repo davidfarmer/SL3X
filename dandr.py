@@ -41,7 +41,6 @@ def initial_preparations(text):
    # BUT, we have to do some conversion for particular authors
    # in order to have the right conditionals in the ifthenelse
     thetext = preprocess.conversion_for_particular_authors(thetext)
-    print("foncerted particular for", component.writer.lower(), component.writer.lower() in ["austin"]);
     thetext = ifthenelse(thetext)
 
    # Since a verbatim environment could contain comments which
@@ -125,7 +124,7 @@ def expand_input_files():
     file_count = 0
     utilities.something_changed_file = 1
     while utilities.something_changed_file:
-        logging.info("looking for an input file", separatecomponents.input_and_preprocess_a_file)
+        logging.info("looking for an input file")
         utilities.something_changed_file = 0
         logging.info("nnnothing");
         component.documentcontents = re.sub(

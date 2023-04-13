@@ -91,8 +91,8 @@ def input_and_preprocess_a_file(txt, preprocess=True):
 
     utilities.something_changed_file += 1
 
-    logging.info("input_and_preprocess_a_file", txt, "\n")
     filestub = txt.group(2).strip()
+    logging.info("input_and_preprocess_a_file"+ filestub+ "\n")
     if "." in filestub and filestub.endswith(('bib','bbl')):   # a hack because I am doing bibliographies stupidly
         filename = filestub
         filename2 = "iGNoRE"
@@ -153,11 +153,11 @@ def input_and_preprocess_a_file(txt, preprocess=True):
     else:
         component.known_files.append(component.inputfilename)
 
-    component.workingdirectory = re.sub(r"[^/]*$","",component.inputfilename)
-
+#    makeoutput.saveoutputfile("everything0a" + filestub + ".tex",newcontents)
     if preprocess:
         logging.debug("preprocess, initial_preparations")
         newcontents = dandr.initial_preparations(newcontents)
+#    makeoutput.saveoutputfile("everything0b" + filestub + ".tex",newcontents)
 
 #    try:
 #        logging.debug("trying utf-8 encoding");
@@ -165,7 +165,7 @@ def input_and_preprocess_a_file(txt, preprocess=True):
 #    except UnicodeDecodeError:
 #        logging.critical("font encoding problem with %s", component.inputfilename)
 
-    logging.debug("leaving input_and_preprocess_a_file", newcontents)
+    logging.debug("leaving input_and_preprocess_a_file"+ filestub)
 
     return newcontents
 

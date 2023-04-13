@@ -72,11 +72,14 @@ except UnicodeDecodeError:
 
 component.documentcontents = dandr.initial_preparations(component.documentcontents)
 
+makeoutput.saveoutputfile("everything00.tex",component.documentcontents)
 # put the whole document into component.documentcontents
 dandr.expand_input_files()
 # not sure if we can get away with dandr.initial_preparations just once.
 # some things, like utilities.other_alphabets_to_latex, haveto be done after
 # all files are read in
+makeoutput.saveoutputfile("everything0.tex",component.documentcontents)
+
 component.documentcontents = dandr.initial_preparations(component.documentcontents)
 
 if r"\begin{document}" in component.documentcontents:
