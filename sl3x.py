@@ -318,7 +318,8 @@ except AttributeError:    # no abstract
 #if component.bibliography_in_html:
 #    makeoutput.saveoutputfile("bibliography",makeoutput.mathjaxmacros() + component.bibliography_in_html)
 
-makeoutput.printdiagnostics()
+if False:
+    makeoutput.printdiagnostics()
 
 makeoutput.make_dependency_tree()
 

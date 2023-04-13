@@ -1903,12 +1903,12 @@ def makeknowl(id,content):
        logging.debug("making knowl %s which starts %s", id, content[:30])
        knowlfilename=utilities.safe_name(id, idname=True)+".knowl"
        thefile = codecs.open(component.outputdirectory+"/"+knowlfilename,"w", "utf-8")
-       try:
-           the_content = the_content.decode('utf-8', errors='replace')
-       except UnicodeEncodeError:
-           logging.warning("FONT ERROR in knowl %s : %s", knowlfilename, the_content[:30])
-       except AttributeError:
-           print("Error with utf-8 decode")
+#       try:
+#           the_content = the_content.decode('utf-8', errors='replace')
+#       except UnicodeEncodeError:
+#           logging.warning("FONT ERROR in knowl %s : %s", knowlfilename, the_content[:30])
+#       except AttributeError:
+#           print("Error with utf-8 decode")
 
        thefile.write(the_content)
        thefile.close()
