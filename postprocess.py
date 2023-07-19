@@ -256,6 +256,11 @@ def fix_various_tags(text):
 
     the_text = text
 
+    # list @label is now @marker
+    the_text = re.sub(r"<ol label=", "<ol marker=",the_text)
+    the_text = re.sub(r"<ul label=", "<ul marker=",the_text)
+    
+
     # br at end of p is meaningless
     the_text = re.sub(r"\s*<br */>\s*</p>","\n</p>",the_text)
     # or at end of li
@@ -376,6 +381,9 @@ def ptx_fix_various_tags(text):  # including particular authors
     if component.writer.lower() in ["mckenna"]:
         the_text = re.sub("&([a-zA-Z]+( |\\||\\\\|/|\n|\t|&|,|\(|\.))", r"&amp;\1", the_text)
         the_text = re.sub("&([a-zA-Z]+( |\\||\\\\|/|\n|\t|&|,|\(|\.))", r"&amp;\1", the_text)
+
+    if component.writer.lower() in ["monaco"]:
+        the_text = re.sub(r'\\dollar', r'$', the_text)
 
     if component.writer == "javajavajava":
         the_text = re.sub(r'<lt/>', r'&lt;', the_text)

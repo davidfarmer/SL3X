@@ -250,6 +250,14 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
 
+    if component.writer.lower() in ["dana"]:
+    #    newtext = re.sub(r"textbf", r"term", newtext)
+        newtext = re.sub(r"\\epigraphhead\[[^\[\]]+\]",r"\\keepinsides", newtext)
+        newtext = re.sub(r"\[style[^\[\]]+\]","", newtext)
+        newtext = re.sub(r"\\(begin|end){mdframed}","", newtext)
+        newtext = utilities.replacemacro(newtext,"keepinsides",1,"#1")
+ #       newtext = utilities.replacemacro(newtext,"keepinsides",1,"#1")
+
     if component.writer.lower() in ["cremona"]:
         logging.warning("author-specific conversion for %s", component.writer)
         component.counter['section'] = -1  # his book has sections, not chapters
@@ -259,6 +267,17 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\\begin{center}(.*?)\\end{center}", r"\\begin{figure}\1\\end{figure}", newtext,0,re.DOTALL)
         newtext = re.sub(r"\\captionof{figure}{}", r"", newtext)
         newtext = utilities.replacemacro(newtext,"captionof",1,"\\caption")
+
+    if component.writer.lower() in ["relcalc"]:
+        newtext = re.sub(r"\\capstart\s*", "", newtext)
+        newtext = re.sub(r"\\(begin|end){myfig}", r"\\\1{figure}", newtext)
+        newtext = re.sub(r"\\(begin|end){mywrapfig}", r"\\\1{figure}", newtext)
+        newtext = utilities.replacemacro(newtext,"inputpdft",1,"\\includegraphics{#1}")
+        newtext = utilities.replacemacro(newtext,"myvref",2,"\\ref{#2}")
+        newtext = utilities.replacemacro(newtext,"myref",2,"\\ref{#2}")
+        newtext = utilities.replacemacro(newtext,"sectionnotes",1,"#1")
+#        newtext = utilities.replacemacro(newtext,"myindex",0,"\\index")
+
 
     if component.writer.lower() in ["keb"]:
         newtext = re.sub(r"} *\\ ", "} ", newtext)
@@ -574,6 +593,12 @@ def conversion_for_particular_authors(text):
        newtext = re.sub(r'\\resizebox{[^{}]*}{[^{}]*}', r"\\Xresizebox", newtext)
        newtext = utilities.replacemacro(newtext,"Xresizebox",1,"#1")
        newtext = utilities.replacemacro(newtext,"parbox",2,"#2")
+
+    if component.writer.lower() in ["monaco"]:
+       newtext = re.sub(r'(subsection)\**{[0-9]+\.[0-9]+:* *', r"\1{", newtext)
+       newtext = re.sub(r'(section)\**{Chapter [0-9]+ *\- *', r"\1{", newtext)
+       newtext = re.sub(r'\\(begin|end){framed}', r"\\\1{example}", newtext)
+       newtext = re.sub(r'\\textbf{\\underline{IN-DEPTH: ([^{}]+)}}:*\\*', r"[\1]", newtext)
 
     if component.writer.lower() in ["bergen"]:
        newtext = re.sub(r"\\ifsolns\b(.*?)\\fi\b", r"\\begin{solution}\1\\end{solution}", newtext, 0, re.DOTALL)
