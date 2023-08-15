@@ -250,6 +250,13 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
 
+    if component.writer.lower() in ["estes"]:
+    #    newtext = re.sub(r"textbf", r"term", newtext)
+        newtext = re.sub(r"\\afterpage{\\blankpage}", "", newtext)
+        newtext = re.sub(r"{\\footnotesize (h[^{}]+)}", r"\\link{\1}", newtext)
+        newtext = re.sub(r"\$ *\\\\", r"$", newtext)
+        newtext = re.sub(r"\\lstinline\$([^\$]+)\$", r"\\code{\1}", newtext)
+
     if component.writer.lower() in ["dana"]:
     #    newtext = re.sub(r"textbf", r"term", newtext)
         newtext = re.sub(r"\\epigraphhead\[[^\[\]]+\]",r"\\keepinsides", newtext)
