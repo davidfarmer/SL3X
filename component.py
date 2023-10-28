@@ -66,6 +66,8 @@ environment={}  # Each entry corresponds to a LaTeX environment
 environment_types={}
 math_macro_types={}
 
+single_use_dictionary={}
+
 environments_with_captions = []
 environments_with_images = []
 environments_with_linebreaks = []
@@ -342,6 +344,7 @@ def initialize_environments():
     examplelikeenvironments = {"example":"Example",
                                "counterexample":"Counterexample",
                                "problem":"Problem",
+                               "project":"Project",
                                "homework":"Homework",
                                "challenge":"Challenge",
                                "exploration":"Exploration",

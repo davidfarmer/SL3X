@@ -250,6 +250,76 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
 
+    if component.writer.lower() in ["nlong"]:
+        newtext = re.sub(r"\\(begin|end){alphalist}",r"\\\1{itemize}",newtext)
+        newtext = re.sub(r"\\(begin|end){goals}",r"\\\1{itemize}",newtext)
+        newtext = re.sub(r"\\(begin|end){summary}",r"\\\1{itemize}",newtext)
+        newtext = re.sub(r"\\(begin|end){activitySolution}",r"\\\1{solution}",newtext)
+        newtext = re.sub(r"\\(begin|end){exerciseSolution}",r"\\\1{solution}",newtext)
+        newtext = re.sub(r"\\(begin|end){smallhint}",r"\\\1{hint}",newtext)
+        newtext = re.sub(r"\\(begin|end){bighint}",r"\\\1{hint}",newtext)
+        newtext = re.sub(r"\$\\lhd\$", "", newtext)
+        newtext = re.sub(r"\$\\bowtie\$", "", newtext)
+
+    if component.writer.lower() in ["birgen"]:
+        newtext = re.sub(r"\\(begin|end){model}",r"\\\1{exploration}",newtext)
+        newtext = re.sub(r"\\homework",r"\\subsection{Homwwork XX.YY}",newtext)
+        newtext = re.sub(r"\\ifodd\s*\\else",r"",newtext)
+        newtext = re.sub(r"\\ifodd.*?\\else",r"",newtext)
+        newtext = re.sub(r"\\begin{project}\s*(.*?)\\end{project}",
+                         birgen_projects, newtext,0,re.DOTALL)
+        newtext = utilities.replacemacro(newtext,"captionsetup",1,"")
+        newtext = utilities.replacemacro(newtext,"captionof",1,"\\caption")
+
+    if component.writer.lower() in ["howell"]:
+        newtext = re.sub(r"(\\label{[^{}]+})}",r"}\1",newtext)
+        newtext = re.sub(r"(\\label{[^{}]+})\]",r"]\1",newtext)
+        newtext = re.sub(r"\[\]",r"",newtext)
+        newtext = re.sub(r"\\scriptsize *",r"",newtext)
+        newtext = re.sub(r"\[resume\]",r"",newtext)
+        newtext = re.sub(r"\\textbf({[a-z])",r"\\term\1",newtext)
+        newtext = re.sub(r"\{\\Large Overview\}",r"",newtext)
+        newtext = re.sub(r"\+\+\++\s+(.*?)\+\+\++",
+                         howell_figures, newtext,0,re.DOTALL)
+
+    if component.writer.lower() in ["pantano"]:
+
+  #stupidity, because this is called twice
+        if "chapterX" in newtext:
+            newtext = re.sub(r"\\chapterX",r"\\chapter",newtext)
+            newtext = re.sub(r"\\sectionX",r"\\section",newtext)
+            newtext = re.sub(r"\\subsectionX",r"\\subsection",newtext)
+        else:
+            newtext = re.sub(r"\\section{",r"\\chapterX{",newtext)
+            newtext = re.sub(r"\\subsection{",r"\\sectionX{",newtext)
+            newtext = re.sub(r"\\subsubsection\b",r"\\subsectionX",newtext)
+
+        newtext = re.sub(r"\\textbf",r"\\terminology",newtext)
+        newtext = re.sub(r"\\begin{(definition|proposition|theorem|example|exercise|corollary|lemma)}{}{}",r"\\begin{\1}",newtext)
+        newtext = re.sub(r"\\begin{(definition|proposition|theorem|example|exercise|corollary|lemma)}{([^{}]+)}{}",r"\\begin{\1}[\2]",newtext)
+
+        newtext = re.sub(r"\[Hint: ([^\[\]]+)\]",r"\\begin{hint} \1 \\end{hint}",newtext)
+        newtext = re.sub(r"\\(begin|end){cys\*}",r"\\\1{challenge}",newtext)
+
+        newtext = re.sub(r"\\(begin|end){brainstorm\*}",r"\\\1{exploration}",newtext)
+        newtext = re.sub(r"\\(begin|end){reflect\*}",r"\\\1{activity}",newtext)
+        newtext = re.sub(r"\\(begin|end){nonexample\*}",r"\\\1{investigation}",newtext)
+
+        newtext = re.sub(r"\\begin{(definition)}{}{([^{}]+)}",r"\\begin{\1}\\label{def:\2}",newtext)
+        newtext = re.sub(r"\\begin{(definition)}{([^{}]+)}{([^{}]+)}",r"\\begin{\1}[\2]\\label{def:\3}",newtext)
+        newtext = re.sub(r"\\begin{(proposition)}{}{([^{}]+)}",r"\\begin{\1}\\label{prop:\2}",newtext)
+        newtext = re.sub(r"\\begin{(proposition)}{([^{}]+)}{([^{}]+)}",r"\\begin{\1}[\2]\\label{prop:\3}",newtext)
+        newtext = re.sub(r"\\begin{(theorem)}{}{([^{}]+)}",r"\\begin{\1}\\label{thm:\2}",newtext)
+        newtext = re.sub(r"\\begin{(theorem)}{([^{}]+)}{([^{}]+)}",r"\\begin{\1}[\2]\\label{thm:\3}",newtext)
+        newtext = re.sub(r"\\begin{(exercise)}{}{([^{}]+)}",r"\\begin{\1}\\label{exer:\2}",newtext)
+        newtext = re.sub(r"\\begin{(exercise)}{([^{}]+)}{([^{}]+)}",r"\\begin{\1}[\2]\\label{exer:\3}",newtext)
+        newtext = re.sub(r"\\begin{(example)}{}{([^{}]+)}",r"\\begin{\1}\\label{ex:\2}",newtext)
+        newtext = re.sub(r"\\begin{(example)}{([^{}]+)}{([^{}]+)}",r"\\begin{\1}[\2]\\label{ex:\3}",newtext)
+        newtext = re.sub(r"\\begin{(corollary)}{}{([^{}]+)}",r"\\begin{\1}\\label{cor:\2}",newtext)
+        newtext = re.sub(r"\\begin{(corollary)}{([^{}]+)}{([^{}]+)}",r"\\begin{\1}[\2]\\label{cor:\3}",newtext)
+        newtext = re.sub(r"\\begin{(lemma)}{}{([^{}]+)}",r"\\begin{\1}\\label{lem:\2}",newtext)
+        newtext = re.sub(r"\\begin{(lemma)}{([^{}]+)}{([^{}]+)}",r"\\begin{\1}[\2]\\label{lem:\3}",newtext)
+
     if component.writer.lower() in ["estes"]:
     #    newtext = re.sub(r"textbf", r"term", newtext)
         newtext = re.sub(r"\\afterpage{\\blankpage}", "", newtext)
@@ -1760,6 +1830,32 @@ def questions_to_exercises(txt, keeptags):
         return the_text
 
 ###############
+def howell_figures(txt):
+        
+    the_text = txt.group(1)
+
+    lines = the_text.split("\n")
+
+    for line in lines:
+        print("line is:", line)
+        if line.startswith("Figure"):
+            print("Found figure number in ", line)
+            the_number = re.sub(r"\s*Figure (.+)",r"\1",line);
+            print("the_number", the_number)
+    
+    the_caption = re.sub(r"\s*Figure .+\s*(.*)\s*$", r"\1", the_text)
+    print("the_caption", the_caption)
+
+    return r"\begin{figure}" + "\n" + the_text + "\n" + r"\end{figure}"
+
+def birgen_projects(txt):
+
+    the_text = txt.group(1)
+    
+    the_text = re.sub(r"^\\item","",the_text)
+    the_text = re.sub(r"\\item *(\\label{[^{}]+})", r"\\end{project}" + "\n\n" + r"\\begin{project}\1", the_text)
+    
+    return r"\begin{project}" + "\n" + the_text + "\n" + r"\end{project}"
 
 def joefields_exer(txt):
 

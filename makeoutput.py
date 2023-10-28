@@ -2339,6 +2339,7 @@ def chapter_section_files():
                 this_page = postprocess.ptx_unwrap_p_images(this_page)
                 this_page = postprocess.ptx_unwrap_sidebyside(this_page)
                 this_page = postprocess.ptx_remove_empty_tags(this_page)
+                this_page = postprocess.ptx_fix_particular_author(this_page)
        # need a flag for when to do this
      #           this_page = postprocess.apex_exercise_group(this_page)
 

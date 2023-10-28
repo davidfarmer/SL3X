@@ -199,9 +199,10 @@ for _ in range(2):
     processenvironments.findunexpandedmacros()
     processenvironments.expand_author_macros()
 
-if component.guess_terminology:
-    processenvironments.convert_author_terminology()
-processenvironments.extract_index_and_terminology()
+# temporarily(?) commenting out because of issues with the PTX conversion
+# if component.guess_terminology:
+#     processenvironments.convert_author_terminology()
+# processenvironments.extract_index_and_terminology()
 
 processenvironments.expand_smart_references()
 

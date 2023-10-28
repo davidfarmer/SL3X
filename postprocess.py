@@ -340,6 +340,8 @@ def ptx_fix_various_tags(text):  # including particular authors
     the_text = re.sub("<ampersand */>", "&amp;", the_text)
 
     the_text = utilities.replacemacro(the_text,"code",1, r'<c>#1</c>')
+    the_text = utilities.replacemacro(the_text,"terminology",1, r'<term>#1</term>')
+    the_text = utilities.replacemacro(the_text,"term",1, r'<term>#1</term>')
 
 #    the_text = re.sub(r"<p>\s*\\begin{(program)}", r"<\1>", the_text)
 #    the_text = re.sub(r"\\end{(program)}\s*</p>", r"</\1>", the_text)
@@ -377,6 +379,91 @@ def ptx_fix_various_tags(text):  # including particular authors
                        the_text, 0, re.DOTALL)
     the_text = re.sub(r"<p>\s*<paragraphs>", "<paragraphs>", the_text)
     the_text = re.sub(r"</paragraphs>\s*</p>", "</paragraphs>", the_text)
+
+    # math mode labels not allowed (because they are parameters)
+#### maybe they are allowed in PreTeXt, so comment out???
+    #  the_text = re.sub(' label="<.*?"',' label="invalidlabel"',the_text)
+
+    the_text = re.sub(r"\\notag\b","",the_text)
+    the_text = re.sub(r"\\quad\b","",the_text)
+    the_text = re.sub(r"\\hfill\b","",the_text)
+    the_text = re.sub(r"\\null\b","",the_text)
+
+# chemistry
+    the_text = re.sub(r"\\begin{reaction\*?}",r'<me class="reaction">',the_text)
+    the_text = re.sub(r"\\end{reaction\*?}",r'</me>',the_text)
+    the_text = re.sub(r"\\begin{reactions\*?}",r'<md class="reaction">',the_text)
+    the_text = re.sub(r"\\end{reactions\*?}",r'</md>',the_text)
+
+# careful, because can occur in math mode
+#    the_text = utilities.replacemacro(the_text,"ch",1, r'<m class="chem">#1</m>')
+
+
+
+    the_text = re.sub(r"<u>\s*</u>","<fillin/>",the_text)
+    the_text = re.sub(r"<u>","<em>",the_text)
+    the_text = re.sub(r"</u>","</em>",the_text)
+    the_text = re.sub(r"<sup>\s*\\textregistered\s*</sup>","<trademark/>",the_text)
+
+    # maybe these should be earlier, in a [square bracket], because they might
+    # end up inside the statement or a paragraph?
+    the_text = utilities.replacemacro(the_text,"exercisetitle",1, r"<title>#1</title>")
+    # only occurs in openintro
+    the_text = utilities.replacemacro(the_text,"tipBoxTitle",1, r"<title>#1</title>")
+
+    the_text = re.sub(r"<nbsp/>(</title>)", r"\1", the_text)
+    the_text = re.sub(r"<nbsp/>(</title>)", r"\1", the_text)
+    the_text = re.sub(r" +(</title>)", r"\1", the_text)
+
+
+    #the_text = re.sub(r"&($|[^a-zA-Z#])",r"<amp />\1",the_text)
+    # apparently it should be
+    the_text = re.sub(r"&($|[^a-zA-Z#])",r"&amp;\1",the_text)
+        # twice, for &&
+    the_text = re.sub(r"&($|[^a-zA-Z#])",r"&amp;\1",the_text)
+    the_text = re.sub(r"< ",r"&lt; ",the_text)
+
+    the_text = re.sub(r"&copy;",r"<copyright/>",the_text)
+    the_text = re.sub(r"\\textregistered",r"<registered/>",the_text)
+
+    the_text = re.sub(r"\\calckey([^{])",r"\\calckey{\1}",the_text)
+    the_text = utilities.replacemacro(the_text,"calckey",1, r"<kbd>#1</kbd>")
+
+    #\text{} only containing math, should not be wrapped in \text{}
+    the_text = re.sub(r"\\text\{\s*\$([^{}\$]+)\$\s*(\.*)\s*\}",r"$\1$\2",the_text)
+
+    # delete paragraphs with useless content
+    the_text = re.sub(r"\s*<p>\s*</p>\s*","\n",the_text)
+    the_text = re.sub(r"\s*<p>\s*\{\s*</p>\s*","\n",the_text)
+    # is this too agressive?  (covers the above two cases)
+    the_text = re.sub(r"\s*<p>[^a-zA-Z]*</p>\s*","\n",the_text)
+
+    the_text = utilities.replacemacro(the_text,"href",2,
+                                      '<url href="#1">#2</url>')
+    # hash in target URL should be literal hash
+    the_text = re.sub(r'href="([^"]*)<hash */>([^"]*)"',r'href="\1#\2"',the_text)
+    # but & should be &amp;
+    # This is dangerous, because applying it twice makes nonsense
+    # need a way to thwart the second substitution
+    the_text = re.sub(r'href="([^"]*)<nbsp */>([^"]*)"',r'href="\1~\2"',the_text)
+  #  the_text = re.sub(r'href="([^"]*)&([^"]*)"',r'href="\1&amp;\2"',the_text)
+    the_text = re.sub(r'(href="[^"]*")', lambda match: utilities.replacein(match,r"&",r"&amp;"),the_text)
+    the_text = re.sub(r'(href="[^"]*")', lambda match: utilities.replacein(match,r"<percent/>",r"%"),the_text)
+
+    the_text = utilities.replacemacro(the_text,"intertext",1,
+        "</mrow>" + "\n" + r"<intertext>#1</intertext>" + "\n" + "<mrow>")
+    # above makes empty <mrow></mrow> , which are then deleted
+    the_text = re.sub(r"\s*<mrow>\s*</mrow>\s*","\n",the_text)
+
+    the_text = re.sub(r"<intertext>(.*?)</intertext>",fixintertext,the_text,0,re.DOTALL)
+
+    return the_text
+
+###################
+
+def ptx_fix_particular_author(text):  # including particular authors
+
+    the_text = text
 
     if component.writer.lower() in ["mckenna"]:
         the_text = re.sub("&([a-zA-Z]+( |\\||\\\\|/|\n|\t|&|,|\(|\.))", r"&amp;\1", the_text)
@@ -424,6 +511,21 @@ def ptx_fix_various_tags(text):  # including particular authors
 
     if component.writer == "austin":
         the_text = re.sub(r'\\cite{([^{}]*)}', r'<xref ref="\1"/>', the_text)
+
+    if component.writer == "howell":
+        the_text = re.sub(r'Chapter 11', r'<xref ref="ch_fs-laplace"/>', the_text)
+        the_text = re.sub(r'Chapter 1\b', r'<xref ref="ch_Complex_Numbers"/>', the_text)
+        the_text = re.sub(r'Chapter 2', r'<xref ref="ch_complex-functions"/>', the_text)
+        the_text = re.sub(r'Chapter 4', r'<xref ref="ch_seq-series-fractals"/>', the_text)
+        the_text = re.sub(r'Chapter 5', r'<xref ref="ch_elementary-fcns"/>', the_text)
+        the_text = re.sub(r'Chapter(s*) 7', r'<xref ref="ch_taylor-laurent"/>', the_text)
+        the_text = re.sub(r'Chapter 8', r'<xref ref="ch_residue"/>', the_text)
+        the_text = re.sub(r'Chapter(s*) 9', r'<xref ref="ch_conformal-mapping"/>', the_text)
+
+        the_text = re.sub(r'<chapter([^<>]*preface">.*?)</chapter>',r"<preface\1</preface>",the_text,1,re.DOTALL)
+
+        the_text = re.sub(r"<p>\s*<em>(Exercises for.*?)</em>\s*</p>(.*?)</(section|subsection)>",
+                         howell_exercises, the_text,0,re.DOTALL)
 
     if component.writer == "zbornik":
         the_text = re.sub(r'\\itemtitle{([^{}]*)}', r'<title>\1</title>', the_text)
@@ -546,83 +648,6 @@ def ptx_fix_various_tags(text):  # including particular authors
         # not sure why the extension is .png instead of .svg (and why the png files contain svg content)
         the_text = re.sub('\.png"', '"', the_text)
         the_text = re.sub('\.</title>', '</title>', the_text)
-
-    # math mode labels not allowed (because they are parameters)
-#### maybe they are allowed in PreTeXt, so comment out???
-    #  the_text = re.sub(' label="<.*?"',' label="invalidlabel"',the_text)
-
-    the_text = re.sub(r"\\notag\b","",the_text)
-    the_text = re.sub(r"\\quad\b","",the_text)
-    the_text = re.sub(r"\\hfill\b","",the_text)
-    the_text = re.sub(r"\\null\b","",the_text)
-
-# chemistry
-    the_text = re.sub(r"\\begin{reaction\*?}",r'<me class="reaction">',the_text)
-    the_text = re.sub(r"\\end{reaction\*?}",r'</me>',the_text)
-    the_text = re.sub(r"\\begin{reactions\*?}",r'<md class="reaction">',the_text)
-    the_text = re.sub(r"\\end{reactions\*?}",r'</md>',the_text)
-
-# careful, because can occur in math mode
-#    the_text = utilities.replacemacro(the_text,"ch",1, r'<m class="chem">#1</m>')
-
-
-
-    the_text = re.sub(r"<u>\s*</u>","<fillin/>",the_text)
-    the_text = re.sub(r"<u>","<em>",the_text)
-    the_text = re.sub(r"</u>","</em>",the_text)
-    the_text = re.sub(r"<sup>\s*\\textregistered\s*</sup>","<trademark/>",the_text)
-
-    # maybe these should be earlier, in a [square bracket], because they might
-    # end up inside the statement or a paragraph?
-    the_text = utilities.replacemacro(the_text,"exercisetitle",1, r"<title>#1</title>")
-    # only occurs in openintro
-    the_text = utilities.replacemacro(the_text,"tipBoxTitle",1, r"<title>#1</title>")
-
-    the_text = re.sub(r"<nbsp/>(</title>)", r"\1", the_text)
-    the_text = re.sub(r"<nbsp/>(</title>)", r"\1", the_text)
-    the_text = re.sub(r" +(</title>)", r"\1", the_text)
-
-
-    #the_text = re.sub(r"&($|[^a-zA-Z#])",r"<amp />\1",the_text)
-    # apparently it should be
-    the_text = re.sub(r"&($|[^a-zA-Z#])",r"&amp;\1",the_text)
-        # twice, for &&
-    the_text = re.sub(r"&($|[^a-zA-Z#])",r"&amp;\1",the_text)
-    the_text = re.sub(r"< ",r"&lt; ",the_text)
-
-    the_text = re.sub(r"&copy;",r"<copyright/>",the_text)
-    the_text = re.sub(r"\\textregistered",r"<registered/>",the_text)
-
-    the_text = re.sub(r"\\calckey([^{])",r"\\calckey{\1}",the_text)
-    the_text = utilities.replacemacro(the_text,"calckey",1, r"<kbd>#1</kbd>")
-
-    #\text{} only containing math, should not be wrapped in \text{}
-    the_text = re.sub(r"\\text\{\s*\$([^{}\$]+)\$\s*(\.*)\s*\}",r"$\1$\2",the_text)
-
-    # delete paragraphs with useless content
-    the_text = re.sub(r"\s*<p>\s*</p>\s*","\n",the_text)
-    the_text = re.sub(r"\s*<p>\s*\{\s*</p>\s*","\n",the_text)
-    # is this too agressive?  (covers the above two cases)
-    the_text = re.sub(r"\s*<p>[^a-zA-Z]*</p>\s*","\n",the_text)
-
-    the_text = utilities.replacemacro(the_text,"href",2,
-                                      '<url href="#1">#2</url>')
-    # hash in target URL should be literal hash
-    the_text = re.sub(r'href="([^"]*)<hash */>([^"]*)"',r'href="\1#\2"',the_text)
-    # but & should be &amp;
-    # This is dangerous, because applying it twice makes nonsense
-    # need a way to thwart the second substitution
-    the_text = re.sub(r'href="([^"]*)<nbsp */>([^"]*)"',r'href="\1~\2"',the_text)
-  #  the_text = re.sub(r'href="([^"]*)&([^"]*)"',r'href="\1&amp;\2"',the_text)
-    the_text = re.sub(r'(href="[^"]*")', lambda match: utilities.replacein(match,r"&",r"&amp;"),the_text)
-    the_text = re.sub(r'(href="[^"]*")', lambda match: utilities.replacein(match,r"<percent/>",r"%"),the_text)
-
-    the_text = utilities.replacemacro(the_text,"intertext",1,
-        "</mrow>" + "\n" + r"<intertext>#1</intertext>" + "\n" + "<mrow>")
-    # above makes empty <mrow></mrow> , which are then deleted
-    the_text = re.sub(r"\s*<mrow>\s*</mrow>\s*","\n",the_text)
-
-    the_text = re.sub(r"<intertext>(.*?)</intertext>",fixintertext,the_text,0,re.DOTALL)
 
     if component.writer == 'oscarlevin':
         the_text = re.sub(r"<m>\\gls\{([^{}]+)\}</m>",r"<m>\\\1</m><idx><h><m>\\\1</m></h></idx>",the_text)
@@ -1136,6 +1161,23 @@ def apex_exercise_group(text):
                       thetext, 0, re.DOTALL)
 
     return thetext
+
+################
+
+def howell_exercises(txt):
+        
+    the_title = txt.group(1)
+    the_text = txt.group(2)
+    the_closing_tag = txt.group(3)
+   
+    the_answer = "<exercises>\n<title>" + the_title + "</title>\n"
+
+    the_answer += the_text
+
+    the_answer += "\n</exercises>\n"
+    the_answer += "</" + the_closing_tag + ">"
+            
+    return the_answer
 
 ################
 
