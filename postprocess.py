@@ -1169,7 +1169,18 @@ def howell_exercises(txt):
     the_title = txt.group(1)
     the_text = txt.group(2)
     the_closing_tag = txt.group(3)
-   
+
+    the_text = re.sub(r"^\s*<ol>\s*", "", the_text)
+    the_text = re.sub(r"\s*</ol>\s*$", "", the_text)
+
+    the_text = utilities.hideolandli(the_text)
+
+    the_text = re.sub("<li([^<>]*>)", r"<exercise\1", the_text)
+    the_text = re.sub("</li>", r"</exercise>", the_text)
+
+    the_text = re.sub("hideol", "ol", the_text)
+    the_text = re.sub("hideli", "li", the_text)
+
     the_answer = "<exercises>\n<title>" + the_title + "</title>\n"
 
     the_answer += the_text

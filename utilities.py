@@ -601,6 +601,31 @@ def replacemac(txt,numargs,replacementtext):
 
 #################
 
+def hideolandli(text):
+    """Replace ol by hideol and li by hideli
+
+    """
+
+    thetext = text
+
+    thetext = re.sub(r"(<ol>.*?</ol>)", hideoi, thetext, 0, re.DOTALL)
+
+    return thetext
+
+#################
+
+def hideoi(txt):
+
+    the_text = txt.group(1)
+
+    the_text = re.sub(r"<ol\b", "<hideol", the_text)
+    the_text = re.sub(r"</ol\b", "</hideol", the_text)
+    the_text = re.sub(r"<li\b", "<hideli", the_text)
+    the_text = re.sub(r"</li\b", "</hideli", the_text)
+
+    return the_text
+
+#################
 def author_name_for_link(author_dict):
 # why don't we use safe_name here?
 
