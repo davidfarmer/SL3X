@@ -67,6 +67,11 @@ def conversion_for_particular_authors(text):
     logging.info("in conversion_for_particular_authors, writer is %s",
                   component.writer)
 
+   # this should be somewhere else
+    # punctuation outside math mode
+    newtext = re.sub(r"([^\\0-9])(\.|,|;|:)\$\$", r"\1$$\2", newtext)  
+    newtext = re.sub(r"([^\\0-9])(\.|,|;|:)\$", r"\1$\2", newtext)  
+
     if component.publisher == "MSP":
         newtext = conversion_for_msp(newtext)  # deleted, is in Archive
 
@@ -250,6 +255,13 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
 
+    if component.writer.lower() in ["hefferon"]:
+    #    newtext = re.sub(r"textbf", r"term", newtext)
+        newtext = re.sub(r"\\nearby([a-z]+) *{",r"\1 \\ref{", newtext)
+        newtext = re.sub(r"\\subsectionoptional",r"\\subsection", newtext)
+        newtext = re.sub(r"\\definend",r"\\term", newtext)
+
+
     if component.writer.lower() in ["nlong"]:
         newtext = re.sub(r"\\(begin|end){alphalist}",r"\\\1{itemize}",newtext)
         newtext = re.sub(r"\\(begin|end){goals}",r"\\\1{itemize}",newtext)
@@ -271,16 +283,136 @@ def conversion_for_particular_authors(text):
         newtext = utilities.replacemacro(newtext,"captionsetup",1,"")
         newtext = utilities.replacemacro(newtext,"captionof",1,"\\caption")
 
+        newtext = re.sub("(?i)l{chapt0a}", "l{Intro_Modeling}",newtext)
+        newtext = re.sub("(?i)l{chapt0}", "l{chap_modeling}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1a}", r"l{Calc_Lines_Slopes_and_Functions}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1b}", r"l{Calc_Derivatives_and_Difference_Quotients}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1c}", r"l{Calc_Properties_of_the_Derivative}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1d}", r"l{Calc_Differential_Equations_and_Slope_Fields}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1f}", r"l{Calc_The_Anti-Derivative_and_the_Integral}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1end}", r"l{Calc_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1e}", r"l{Calc_Eulers_Method}",newtext)
+        newtext = re.sub(r"(?i)l{chapt1}", r"l{chap_calculus}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2}", r"l{chap_Exp_Models}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2a}", r"l{Exp_Models_The_Modeling_Process}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2b}", r"l{Exp_Models_Population_and_Doubling_Time}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2c}", r"l{Exp_Models_Newtons_Law_of_Heating_and_Cooling}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2d}", r"l{Exp_Models_Logistic_Population_Model}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2e}", r"l{Exp_Models_Harvesting_Model}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2f}", r"l{Exp_Models_Drug_Dosing}",newtext)
+        newtext = re.sub(r"(?i)l{chapt5a}", r"l{Exp_Models_Gastro-Intestinal_Tract}",newtext)
+        newtext = re.sub(r"(?i)l{chapt2nd}", r"l{Exp_Models_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chapt3}", r"l{chap_Second_Order_DEs}",newtext)
+        newtext = re.sub(r"(?i)l{chapt3a}", r"l{Second_Order_DEs_Classical_Mechanics_Brief_Introduction}",newtext)
+        newtext = re.sub(r"(?i)l{chapt3b}", r"l{Second_Order_DEs_Air_Resistance}",newtext)
+        newtext = re.sub(r"(?i)l{chapt3c1}", r"l{Second_Order_DEs_Springs}",newtext)
+        newtext = re.sub(r"(?i)l{chapt3d}", r"l{Second_Order_DEs_Bungee_Jumping}",newtext)
+        newtext = re.sub(r"(?i)l{chapt3end}", r"l{Second_Order_DEs_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chapt4}", r"l{chap_Numerical_integration}",newtext)
+        newtext = re.sub(r"(?i)l{chapt4a}", r"l{Numerical_Integration_Trapezoid,_Midpoint_and_Simpsons_Rule}",newtext)
+        newtext = re.sub(r"(?i)l{chapt4b}", r"l{Numerical_Integration_Improved_Eulers_Method}",newtext)
+        newtext = re.sub(r"(?i)l{chapt4c}", r"l{Numerical_Integration_Runge-Kutta_Method}",newtext)
+        newtext = re.sub(r"(?i)l{chapt4end}", r"l{Numerical_Integration_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chapt5}", r"l{chap_Sys_of_DEs}",newtext)
+        newtext = re.sub(r"(?i)l{chapt5b}", r"l{Sys_of_DEs_Interacting_Species}",newtext)
+        newtext = re.sub(r"(?i)l{chapt5c}", r"l{Sys_of_DEs_Competition_and_Symbiosis}",newtext)
+        newtext = re.sub(r"(?i)l{chapt5d}", r"l{Sys_of_DEs_S-I-R_Model}",newtext)
+        newtext = re.sub(r"(?i)l{chapt5end}", r"l{Sys_of_DEs_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chapt5e}", r"l{Sys_of_DEs_Malaria}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6}", r"l{chap_Projects}",newtext)
+        newtext = re.sub(r"(?i)l{chapt7}", r"l{chap_Sequences_and_Series}",newtext)
+        newtext = re.sub(r"(?i)l{chapt7a}", r"l{Sequences_and_Series_Sequences}",newtext)
+        newtext = re.sub(r"(?i)l{chapt7b}", r"l{Sequences_and_Series_Series}",newtext)
+        newtext = re.sub(r"(?i)l{chapt7c}", r"l{Sequences_and_Series_Power_Series}",newtext)
+        newtext = re.sub(r"(?i)l{chapt7end}", r"l{Sequences_and_Series_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6a}", r"l{Projects_Electrical_Circuits}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6b}", r"l{Projects_Rocket_Motion}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6c}", r"l{Projects_Hot_Air_Balloons}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6d}", r"l{Projects_Pendulums}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6e}", r"l{Projects_Chronic_Wasting_Disease_in_Deer}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6f}", r"l{Projects_BioAccumulation}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6g}", r"l{Projects_Pan_Water_Cycle}",newtext)
+        newtext = re.sub(r"(?i)l{chapt6h}", r"l{Projects_Rumor_Mill}",newtext)
+        newtext = re.sub(r"(?i)l{chapt0aApp1}", r"l{App_Mathematical_Model_Report}",newtext)
+        newtext = re.sub(r"(?i)l{Vensim1}", r"l{App_VenSim_Tutorial_1}",newtext)
+        newtext = re.sub(r"(?i)l{Vensim2}", r"l{App_VenSim_Tutorial_2}",newtext)
+
+        newtext = re.sub(r"(?i)l{chpt0a}", r"l{Intro_Modeling}",newtext)
+        newtext = re.sub(r"(?i)l{chpt1a}", r"l{Calc_Lines_Slopes_and_Functions}",newtext)
+        newtext = re.sub(r"(?i)l{chpt1b}", r"l{Calc_Derivatives_and_Difference_Quotients}",newtext)
+        newtext = re.sub(r"(?i)l{chpt1c}", r"l{Calc_Properties_of_the_Derivative}",newtext)
+        newtext = re.sub(r"(?i)l{chpt1d}", r"l{Calc_Differential_Equations_and_Slope_Fields}",newtext)
+        newtext = re.sub(r"(?i)l{chpt1f}", r"l{Calc_The_Anti-Derivative_and_the_Integral}",newtext)
+        newtext = re.sub(r"(?i)l{chpt1end}", r"l{Calc_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chpt1e}", r"l{Calc_Eulers_Method}",newtext)
+        newtext = re.sub(r"(?i)l{chpt2a}", r"l{Exp_Models_The_Modeling_Process}",newtext)
+        newtext = re.sub(r"(?i)l{chpt2b}", r"l{Exp_Models_Population_and_Doubling_Time}",newtext)
+        newtext = re.sub(r"(?i)l{chpt2c}", r"l{Exp_Models_Newtons_Law_of_Heating_and_Cooling}",newtext)
+        newtext = re.sub(r"(?i)l{chpt2d}", r"l{Exp_Models_Logistic_Population_Model}",newtext)
+        newtext = re.sub(r"(?i)l{chpt2e}", r"l{Exp_Models_Harvesting_Model}",newtext)
+        newtext = re.sub(r"(?i)l{chpt2f}", r"l{Exp_Models_Drug_Dosing}",newtext)
+        newtext = re.sub(r"(?i)l{chpt5a}", r"l{Exp_Models_Gastro-Intestinal_Tract}",newtext)
+        newtext = re.sub(r"(?i)l{chpt2nd}", r"l{Exp_Models_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chpt3a}", r"l{Second_Order_DEs_Classical_Mechanics_Brief_Introduction}",newtext)
+        newtext = re.sub(r"(?i)l{chpt3b}", r"l{Second_Order_DEs_Air_Resistance}",newtext)
+        newtext = re.sub(r"(?i)l{chpt3c1}", r"l{Second_Order_DEs_Springs}",newtext)
+        newtext = re.sub(r"(?i)l{chpt3d}", r"l{Second_Order_DEs_Bungee_Jumping}",newtext)
+        newtext = re.sub(r"(?i)l{chpt3end}", r"l{Second_Order_DEs_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chpt4a}", r"l{Numerical_Integration_Trapezoid,_Midpoint_and_Simpsons_Rule}",newtext)
+        newtext = re.sub(r"(?i)l{chpt4b}", r"l{Numerical_Integration_Improved_Eulers_Method}",newtext)
+        newtext = re.sub(r"(?i)l{chpt4c}", r"l{Numerical_Integration_Runge-Kutta_Method}",newtext)
+        newtext = re.sub(r"(?i)l{chpt4end}", r"l{Numerical_Integration_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chpt5b}", r"l{Sys_of_DEs_Interacting_Species}",newtext)
+        newtext = re.sub(r"(?i)l{chpt5c}", r"l{Sys_of_DEs_Competition_and_Symbiosis}",newtext)
+        newtext = re.sub(r"(?i)l{chpt5d}", r"l{Sys_of_DEs_S-I-R_Model}",newtext)
+        newtext = re.sub(r"(?i)l{chpt5end}", r"l{Sys_of_DEs_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chpt5e}", r"l{Sys_of_DEs_Malaria}",newtext)
+        newtext = re.sub(r"(?i)l{chpt7a}", r"l{Sequences_and_Series_Sequences}",newtext)
+        newtext = re.sub(r"(?i)l{chpt7b}", r"l{Sequences_and_Series_Series}",newtext)
+        newtext = re.sub(r"(?i)l{chpt7c}", r"l{Sequences_and_Series_Power_Series}",newtext)
+        newtext = re.sub(r"(?i)l{chpt7end}", r"l{Sequences_and_Series_Review}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6a}", r"l{Projects_Electrical_Circuits}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6b}", r"l{Projects_Rocket_Motion}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6c}", r"l{Projects_Hot_Air_Balloons}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6d}", r"l{Projects_Pendulums}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6e}", r"l{Projects_Chronic_Wasting_Disease_in_Deer}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6f}", r"l{Projects_BioAccumulation}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6g}", r"l{Projects_Pan_Water_Cycle}",newtext)
+        newtext = re.sub(r"(?i)l{chpt6h}", r"l{Projects_Rumor_Mill}",newtext)
+        newtext = re.sub(r"(?i)l{chpt0aApp1}", r"l{App_Mathematical_Model_Report}",newtext)
+
+
     if component.writer.lower() in ["howell"]:
         newtext = re.sub(r"(\\label{[^{}]+})}",r"}\1",newtext)
         newtext = re.sub(r"(\\label{[^{}]+})\]",r"]\1",newtext)
+        newtext = re.sub(r"\.(\\label{)",".\n" + r"\1",newtext)
         newtext = re.sub(r"\[\]",r"",newtext)
         newtext = re.sub(r"\\scriptsize *",r"",newtext)
+        newtext = re.sub(r"\\begin{subfigure}.*",r"",newtext)
+        newtext = re.sub(r"\\end{subfigure}.*",r"",newtext)
         newtext = re.sub(r"\[resume\]",r"",newtext)
         newtext = re.sub(r"\\textbf({[a-z])",r"\\term\1",newtext)
         newtext = re.sub(r"\{\\Large Overview\}",r"",newtext)
         newtext = re.sub(r"\+\+\++\s+(.*?)\+\+\++",
                          howell_figures, newtext,0,re.DOTALL)
+
+        newtext = re.sub(r"\\label{fig",r"\\LABEL{fig",newtext,0,re.DOTALL)
+
+        newtext = re.sub(r"\\emph{ *Hint:}\s*(.*?\.)\s",r"\\hint{\1}",newtext,0,re.DOTALL)
+        newtext = re.sub(r"\\emph{ *Hint}:\s*(.*?\.)\s",r"\\hint{\1}",newtext,0,re.DOTALL)
+        newtext = re.sub(r"\bHint\s*:*\s*([^\.]+\.)",r"\\hint{\1}",newtext,0,re.DOTALL)
+
+        newtext = re.sub(r"\\textbf{\\Large Exercises for (S|s)ection \\ref{[^{}]+}}", r"\\begin{exercises}[Exercises]", newtext)
+        newtext = re.sub(r"(\\section)", r"\\end{exercises}" + "\n" + r"\1", newtext)
+        newtext = re.sub(r"(\\chapter)", r"\\end{exercises}" + "\n" + r"\1", newtext)
+        newtext = re.sub(r"\\begin{exercises}(.*?)\\begin{enumerate}(.*?)\\end{enumerate}\s*\\end{exercises}",
+                         joefields_exer, newtext,0,re.DOTALL)
+
+        newtext = newtext + r"\end{exercises}"
+        newtext = re.sub(r"\\end{exercises}" + "\n*" + r"\\end{exercises}", r"\\end{exercises}" + "\n", newtext)
+        newtext = re.sub(r"\\end{exercises}", "", newtext, 1)
+        newtext = re.sub(r"\\end{exercises}", "", newtext, 1)
+        newtext = re.sub(r"(\\chapter.{,1000})\\end{exercises}", r"\1", newtext, 0, re.DOTALL)
 
     if component.writer.lower() in ["pantano"]:
 
@@ -294,6 +426,8 @@ def conversion_for_particular_authors(text):
             newtext = re.sub(r"\\subsection{",r"\\sectionX{",newtext)
             newtext = re.sub(r"\\subsubsection\b",r"\\subsectionX",newtext)
 
+        newtext = re.sub(r"sec:card",r"chap-cardinalities",newtext)
+        newtext = re.sub(r"{examples}",r"{example}",newtext)
         newtext = re.sub(r"\\textbf",r"\\terminology",newtext)
         newtext = re.sub(r"\\begin{(definition|proposition|theorem|example|exercise|corollary|lemma)}{}{}",r"\\begin{\1}",newtext)
         newtext = re.sub(r"\\begin{(definition|proposition|theorem|example|exercise|corollary|lemma)}{([^{}]+)}{}",r"\\begin{\1}[\2]",newtext)
@@ -1862,12 +1996,26 @@ def joefields_exer(txt):
     the_start = txt.group(1)
     the_text = txt.group(2)
 
+    the_text = re.sub(r"\\begin{enumerate}(.*?)\\end{enumerate}",
+                         item_to_tsk, the_text,0,re.DOTALL)
+
     the_text = re.sub(r"\\item", r"\\end{exercise}" + "\n\n" + r"\\begin{exercise}", the_text)
 
     the_text = the_text + r"\end{exercise}"
     the_text = re.sub(r"^\s*\\end{exercise}", "", the_text)
 
     return r"\begin{exercises}" + "\n" + the_start + the_text + "\n" + r"\end{exercises}"
+
+def item_to_tsk(txt):
+
+    the_text = txt.group(1)
+
+    the_text = re.sub(r"\\item", r"\\end{task}" + "\n\n" + r"\\begin{task}", the_text)
+
+    the_text = the_text + r"\end{task}"
+    the_text = re.sub(r"^\s*\\end{task}", "", the_text)
+
+    return the_text
 
 ###############
 

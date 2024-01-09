@@ -321,7 +321,7 @@ def fix_various_tags(text):
 
     return the_text
 
-def ptx_fix_various_tags(text):  # including particular authors
+def ptx_fix_various_tags(text):  # not including particular authors
 
     the_text = text
 
@@ -465,12 +465,18 @@ def ptx_fix_particular_author(text):  # including particular authors
 
     the_text = text
 
+    the_text = re.sub(' label="" >', ">",the_text)
+    the_text = re.sub(' label=""', "",the_text)
+
     if component.writer.lower() in ["mckenna"]:
         the_text = re.sub("&([a-zA-Z]+( |\\||\\\\|/|\n|\t|&|,|\(|\.))", r"&amp;\1", the_text)
         the_text = re.sub("&([a-zA-Z]+( |\\||\\\\|/|\n|\t|&|,|\(|\.))", r"&amp;\1", the_text)
 
     if component.writer.lower() in ["monaco"]:
         the_text = re.sub(r'\\dollar', r'$', the_text)
+
+    if component.writer.lower() in ["pantano"]:
+        the_text = re.sub(r'{\\terminology', r'{\\mathbf', the_text)
 
     if component.writer == "javajavajava":
         the_text = re.sub(r'<lt/>', r'&lt;', the_text)
@@ -524,8 +530,14 @@ def ptx_fix_particular_author(text):  # including particular authors
 
         the_text = re.sub(r'<chapter([^<>]*preface">.*?)</chapter>',r"<preface\1</preface>",the_text,1,re.DOTALL)
 
-        the_text = re.sub(r"<p>\s*<em>(Exercises for.*?)</em>\s*</p>(.*?)</(section|subsection)>",
-                         howell_exercises, the_text,0,re.DOTALL)
+        the_text = re.sub(r'<p>\s*\\end{exercises}\s*</p>',"",the_text)
+
+#        the_text = re.sub(r"(<exercise[^<>]*>)(.*?)(</exercise>)",
+#                         postprocess_exer, the_text,0,re.DOTALL)
+
+    #    the_text = re.sub(r"<p>\s*<em>(Exercises for.*?)</em>\s*</p>(.*?)</(section|subsection)>",
+    #    
+    #                     howell_exercises, the_text,0,re.DOTALL)
 
     if component.writer == "zbornik":
         the_text = re.sub(r'\\itemtitle{([^{}]*)}', r'<title>\1</title>', the_text)
@@ -658,6 +670,21 @@ def ptx_fix_particular_author(text):  # including particular authors
     return the_text
 
 ###################
+def postprocess_exer(txt):
+
+    the_start_tag = txt.group(1)
+    the_content = txt.group(2)
+    the_end_tag = txt.group(3)
+
+    print("in postprocess_exer the_content was", the_content)
+
+    if "<task>" in the_content:
+        the_content = re.sub("(\s*)<statement>", r"\1<introduction>", the_content)
+        the_content = re.sub("</statement>\s*$", "", the_content)
+        the_content = re.sub("<task>", "</introduction>\n<task>", the_content, 1)
+
+    return the_start_tag + the_content + the_end_tag
+
 def ptx_fix_c(txt):
 
     the_content = txt.group(1)
