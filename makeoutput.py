@@ -1218,7 +1218,8 @@ def tagsandheading(sha1key, target="html"):
             thecodenumber = comp['codenumber']
         except KeyError:
             logging.error("found a %s with no codenumber", marker)
-            return ['\n<figure>\n','','\n</figure>\n']
+            pass
+ #           return ['\n<figure>\n','','\n</figure>\n']
         if thecaption:
           if component.target == 'html':
             if marker == "wrapfigure":

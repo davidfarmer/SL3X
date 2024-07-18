@@ -396,7 +396,7 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\+\+\++\s+(.*?)\+\+\++",
                          howell_figures, newtext,0,re.DOTALL)
 
-        newtext = re.sub(r"\\label{fig",r"\\LABEL{fig",newtext,0,re.DOTALL)
+ #       newtext = re.sub(r"\\label{fig",r"\\LABEL{fig",newtext,0,re.DOTALL)
 
         newtext = re.sub(r"\\emph{ *Hint:}\s*(.*?\.)\s",r"\\hint{\1}",newtext,0,re.DOTALL)
         newtext = re.sub(r"\\emph{ *Hint}:\s*(.*?\.)\s",r"\\hint{\1}",newtext,0,re.DOTALL)
@@ -413,6 +413,8 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\\end{exercises}", "", newtext, 1)
         newtext = re.sub(r"\\end{exercises}", "", newtext, 1)
         newtext = re.sub(r"(\\chapter.{,1000})\\end{exercises}", r"\1", newtext, 0, re.DOTALL)
+
+        newtext = utilities.replacemacro(newtext,"solution",1,"\\begin{solution}#1\\end{solution}")
 
     if component.writer.lower() in ["pantano"]:
 

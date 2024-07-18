@@ -520,10 +520,12 @@ def ptx_fix_particular_author(text):  # including particular authors
 
     if component.writer == "howell":
         the_text = re.sub(r'Chapter 11', r'<xref ref="ch_fs-laplace"/>', the_text)
+        the_text = re.sub(r'Chapter 10', r'<xref ref="ch_harmonic-apps"/>', the_text)
         the_text = re.sub(r'Chapter 1\b', r'<xref ref="ch_Complex_Numbers"/>', the_text)
         the_text = re.sub(r'Chapter 2', r'<xref ref="ch_complex-functions"/>', the_text)
         the_text = re.sub(r'Chapter 4', r'<xref ref="ch_seq-series-fractals"/>', the_text)
         the_text = re.sub(r'Chapter 5', r'<xref ref="ch_elementary-fcns"/>', the_text)
+        the_text = re.sub(r'Chapter 6', r'<xref ref="ch_complex-integration"/>', the_text)
         the_text = re.sub(r'Chapter(s*) 7', r'<xref ref="ch_taylor-laurent"/>', the_text)
         the_text = re.sub(r'Chapter 8', r'<xref ref="ch_residue"/>', the_text)
         the_text = re.sub(r'Chapter(s*) 9', r'<xref ref="ch_conformal-mapping"/>', the_text)
@@ -531,6 +533,12 @@ def ptx_fix_particular_author(text):  # including particular authors
         the_text = re.sub(r'<chapter([^<>]*preface">.*?)</chapter>',r"<preface\1</preface>",the_text,1,re.DOTALL)
 
         the_text = re.sub(r'<p>\s*\\end{exercises}\s*</p>',"",the_text)
+        the_text = re.sub(r'<p>\s*\\end{exercise}\s*</p>',"",the_text)
+
+        the_text = re.sub(r'<p>\s*(<exercises)',r"\1",the_text)
+        the_text = re.sub(r'(</exercises>)\s*</p>',r"\1",the_text)
+
+        the_text = re.sub(r'\.png',".svg",the_text)
 
 #        the_text = re.sub(r"(<exercise[^<>]*>)(.*?)(</exercise>)",
 #                         postprocess_exer, the_text,0,re.DOTALL)
