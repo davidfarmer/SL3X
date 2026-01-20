@@ -478,6 +478,26 @@ def ptx_fix_particular_author(text):  # including particular authors
     if component.writer.lower() in ["pantano"]:
         the_text = re.sub(r'{\\terminology', r'{\\mathbf', the_text)
 
+    if component.writer.lower() in ["thinkjava"]:
+        the_text = re.sub(r'<p>\s*\\begin{(stdout)}\s*(.*?)\s*\\end{(stdout)}\s*</p>', fixthinkjava, the_text, 0, re.DOTALL)
+        the_text = re.sub(r'<p>\s*\\begin{(code)}\s*(.*?)\s*\\end{(code)}\s*</p>', fixthinkjava, the_text, 0, re.DOTALL)
+        the_text = re.sub(r'<p>\s*\\begin{(trinket)}{([^{}]*)}\s*(.*?)\s*\\end{trinket}\s*</p>', fixthinkjava, the_text, 0, re.DOTALL)
+
+        the_text = re.sub(r'<(stdout)>\s*(.*?)\s*</(stdout)>', fixthinkjava, the_text, 0, re.DOTALL)
+        the_text = re.sub(r'<(code)>\s*(.*?)\s*</(code)>', fixthinkjava, the_text, 0, re.DOTALL)
+        the_text = re.sub(r'<(trinket)>\s*{([^{}]*)}\s*(.*?)\s*</trinket>', fixthinkjava, the_text, 0, re.DOTALL)
+
+
+        the_text = utilities.replacemacro(the_text,"java", 1, r'<c>#1</c>')
+        the_text = re.sub(r'</idx>\s*</p>\s*<p>',"</idx>",the_text)
+#        the_text = re.sub(r'PERCENT',"%",the_text)
+#        the_text = re.sub(r'ANDAND',"&amp;&amp;",the_text)
+        the_text = utilities.replacemacro(the_text,"JAva", 1, r'<c>#1</c>')
+
+    if component.writer.lower() in ["beck"]:
+# why was this needed?
+        the_text = utilities.replacemacro(the_text,"cite", 1, r'<xref ref="#1"/>')
+
     if component.writer == "javajavajava":
         the_text = re.sub(r'<lt/>', r'&lt;', the_text)
         the_text = re.sub(r'\[\[\[', r'&lt;', the_text)
@@ -697,7 +717,7 @@ def ptx_fix_c(txt):
 
     the_content = txt.group(1)
 
-    print("in ptx_fix_c the_content was", the_content)
+ #   print("in ptx_fix_c the_content was", the_content)
 
     the_content = re.sub("<nbsp */*>", " ", the_content)
     the_content = re.sub("</*b>", "", the_content)
@@ -705,7 +725,7 @@ def ptx_fix_c(txt):
     the_content = re.sub("</*fillin */*>", "____", the_content)
     the_content = re.sub("</*m>", " ", the_content)  # how to handle math in c?
 
-    print("in ptx_fix_c the_content is", the_content)
+ #   print("in ptx_fix_c the_content is", the_content)
     return "<c>" + the_content + "</c>"
 
 ###################
@@ -742,6 +762,29 @@ def makesolidunique(txt):
     return '<problem ' + the_text + '</problem>'
 
 ###################
+
+def fixthinkjava(txt):
+    
+    #    the_text = re.sub(r'<p>\s*\\begin{stdout}', "<console>\n<output>", the_text)
+    #    the_text = re.sub(r'\\end{stdout}\s*</p>', "</output>\n</console>", the_text)
+    the_tag = txt.group(1)
+    the_text = txt.group(2)
+    the_other = txt.group(3)
+    
+    the_text = re.sub(r"</p>\s*<p>", "",the_text)
+    the_other = re.sub(r"</p>\s*<p>", "",the_other)
+
+    if the_tag == "stdout":
+        return "\n<console>\n<output>\n" + the_text + "\n</output>\n</console>\n"
+    
+    if the_tag == "code":
+        return "\n<program>\n" + the_text + "\n</program>\n"
+    
+  #      the_text = re.sub(r'<p>\s*\\begin{trinket}{([^{}]*)}', r'<listing filename="\1">\n<program interactive="activecode">', the_text)
+    if the_tag == "trinket":
+        return '\n<listing filename="' + the_text + '">\n<program interactive="activecode">\n' + the_other + '\n</program>\n</listing>\n'
+    
+    return "<intertext>" + the_text + "</intertext>"
 
 
 def fixintertext(txt):

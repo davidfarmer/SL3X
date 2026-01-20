@@ -701,8 +701,11 @@ def tagsandheading(sha1key, target="html"):
         logging.warning("unknown environment %s in  %s", marker, comp)
         return ['<div class="unprocessed">','','</div>']
 
-    if marker in ["verbatim","lstlisting"]:
+    if marker in ["verbatim"]:
         return ['<pre>','','</pre>']
+
+    if marker in ["lstlisting", "trinket", "stdout", "code"]:
+        return ['<' + marker + '>','','</' + marker + '>']
 
     if marker in ["program"]:
         return ['<program><input>','','</input></program>']

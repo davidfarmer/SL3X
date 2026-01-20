@@ -248,6 +248,21 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\$\\Box\$", "", newtext)
 
 
+    if component.writer.lower() in ["thinkjava"]:
+    #    newtext = re.sub(r"textbf", r"term", newtext)
+        newtext = re.sub(r"\\label{[^{}]*}\s*(\\label{[^{}]*})",r"\1", newtext)
+#        newtext = re.sub(r"\\java{([^{}]*)[%]([^{}]*)}",r"\\java{\1\\%\2}", newtext)
+        newtext = re.sub(r"\\java{([^{}]*)[>]([^{}]*)}",r"\\java{\1MORE\2}", newtext)
+        newtext = re.sub(r"\\java{([^{}]*)[<]([^{}]*)}",r"\\java{\1LESS\2}", newtext)
+        newtext = re.sub(r"\\java{([^{}]*)[>]([^{}]*)}",r"\\java{\1MORE\2}", newtext)
+        newtext = re.sub(r"\\java{([^{}]*)[<]([^{}]*)}",r"\\java{\1LESS\2}", newtext)
+        newtext = re.sub(r"println\(([^{}]*)[>]([^{}]*)\)",r"println(\1MORE\2)", newtext)
+        newtext = re.sub(r"println\(([^{}]*)[<]([^{}]*)\)",r"println(\1LESS\2)", newtext)
+        newtext = re.sub(r"\\java{([^{}]*)&&([^{}]*)}",r"\\java{\1ANDAND\2}", newtext)
+        newtext = re.sub(r'<Card>', "LESSCardMORE", newtext)
+        newtext = re.sub(r'<DrawablePolygon>', "LESSDrawablePolygonMORE", newtext)
+        newtext = re.sub(r'{trinket}\[[0-9]*\]', "{trinket}", newtext)
+
     if component.writer.lower() in ["austin"]:
     #    newtext = re.sub(r"textbf", r"term", newtext)
         newtext = re.sub(r"(\\cite{[^,}]+), *",r"\1}\\cite{", newtext)
@@ -261,6 +276,11 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\\subsectionoptional",r"\\subsection", newtext)
         newtext = re.sub(r"\\definend",r"\\term", newtext)
 
+    if component.writer.lower() in ["ernst"]:
+        newtext = re.sub(r"label=\\textrm{(\\alph\*)}",r"", newtext)
+        newtext = re.sub(r"\[label=\\rm{(\\alph\*)}\]",r"", newtext)
+        newtext = re.sub(r"\\textbf",r"\\term", newtext)
+        newtext = utilities.replacemacro(newtext,"tcboxmath",0,"")
 
     if component.writer.lower() in ["nlong"]:
         newtext = re.sub(r"\\(begin|end){alphalist}",r"\\\1{itemize}",newtext)
@@ -272,6 +292,11 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\\(begin|end){bighint}",r"\\\1{hint}",newtext)
         newtext = re.sub(r"\$\\lhd\$", "", newtext)
         newtext = re.sub(r"\$\\bowtie\$", "", newtext)
+
+    if component.writer.lower() in ["beck"]:
+        newtext = utilities.replacemacro(newtext,"needspace",1,"")
+
+
 
     if component.writer.lower() in ["birgen"]:
         newtext = re.sub(r"\\(begin|end){model}",r"\\\1{exploration}",newtext)
@@ -491,6 +516,13 @@ def conversion_for_particular_authors(text):
         newtext = utilities.replacemacro(newtext,"sectionnotes",1,"#1")
 #        newtext = utilities.replacemacro(newtext,"myindex",0,"\\index")
 
+
+    if component.writer.lower() in ["maple"]:
+        newtext = re.sub(r"<x", "< x ", newtext)
+        newtext = re.sub(r"marginfigure", "aside", newtext)
+  #      newtext = re.sub(r"nameref", "ref", newtext)
+        newtext = re.sub(r"marginnote\[[^\[\]]+\]", "marginnote", newtext)
+        newtext = utilities.replacemacro(newtext,"marginnote",1,"\\begin{aside}#1\\end{aside}")
 
     if component.writer.lower() in ["keb"]:
         newtext = re.sub(r"} *\\ ", "} ", newtext)

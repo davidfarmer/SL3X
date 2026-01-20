@@ -295,6 +295,9 @@ def initialize_environments():
                 "verbatim":{'display':'anY','class':'layout','counter':'misc'},
                 "sageexample":{'display':'anY','class':'layout','counter':'misc'},
                 "lstlisting":{'display':'anY','class':'layout','counter':'misc'},
+                "trinket":{'display':'anY','class':'layout','counter':'misc'},
+                "stdout":{'display':'anY','class':'layout','counter':'misc'},
+                "code":{'display':'anY','class':'layout','counter':'misc'},
                 "verb":{'display':'anY','class':'layout','counter':'misc'},
                 "verse":{'display':'anY','class':'layout','counter':'misc'},
                 "figure":{'display':'block','class':'figure','counter':'figure'},
@@ -311,7 +314,7 @@ def initialize_environments():
                 "blob":{'display':'anY','class':'layout','counter':'misc'}
                 }
 
-    verbatim_environments = ['verb','verbatim','lstlisting', 'sageexample', 'genericpreformat', 'tikz', 'tikzpicture', 'circuitikz']
+    verbatim_environments = ['verb','verbatim','lstlisting', 'trinket', 'stdout', 'code', 'sageexample', 'genericpreformat', 'tikz', 'tikzpicture', 'circuitikz']
 
     blocks_that_can_contain_paragraphs=[
                    'blob','abstract','paragraphs',

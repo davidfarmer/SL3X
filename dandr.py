@@ -48,6 +48,9 @@ def initial_preparations(text):
    # Note that one can construct scenarios where this approach fails.
     thetext = separatecomponents.separateenvironment("verbatim",thetext)
     thetext = separatecomponents.separateenvironment("lstlisting",thetext)
+    thetext = separatecomponents.separateenvironment("trinket",thetext)
+    thetext = separatecomponents.separateenvironment("stdout",thetext)
+    thetext = separatecomponents.separateenvironment("code",thetext)
     thetext = separatecomponents.separateenvironment("sageexample",thetext)
    # Also extract \verb+verbatim textgoes here+
     thetext = separatecomponents.separateverb(thetext)   
