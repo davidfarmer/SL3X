@@ -205,6 +205,151 @@ def conversion_for_particular_authors(text):
     newtext = re.sub(r"\\newenvironment{([^}]+)}{{\\[a-z]+ ([a-zA-Z]+)[\\, ]*}}{}\s",
                      r"\\DeclareMathOperator{\\\1}{\2}" + "\n",newtext)
 
+    if component.writer.lower() in ["doree"]:
+        newtext = re.sub(r"{(apart|actpart|exerpart)}", r"{enumerate}",newtext)
+        newtext = re.sub(r"{bull}", r"{itemize}",newtext)
+        newtext = re.sub(r"{pff}", r"{proof}",newtext)
+        newtext = utilities.replacemacro(newtext,"vocab",1,"\\term{#1}")
+        newtext = re.sub(r"\\Cref({[^{}]+} *{)", r"\\Dref\1",newtext)
+        newtext = utilities.replacemacro(newtext,"Dref",2,"\\ref{#1}")
+
+        newtext = utilities.replacemacro(newtext,"chwarmup",0,"Prologue: Handshakes")
+        newtext = utilities.replacemacro(newtext,"chcounting",0,"Listing and Counting")
+        newtext = utilities.replacemacro(newtext,"chgraphthy",0,"Graph Theory")
+        newtext = utilities.replacemacro(newtext,"chnothy",0,"Number Theory")
+        newtext = utilities.replacemacro(newtext,"chlogic",0,"Logic and Proof")
+        newtext = utilities.replacemacro(newtext,"chfn",0,"Functions")
+        newtext = utilities.replacemacro(newtext,"chsetrel",0,"Sets and Relations")
+        newtext = utilities.replacemacro(newtext,"chrecind",0,"Recursion and Induction")
+        newtext = utilities.replacemacro(newtext,"chsumprod",0,"Sums and Products")
+        newtext = utilities.replacemacro(newtext,"chwrapup",0,"Epilogue: Hotel Infinity")
+        newtext = utilities.replacemacro(newtext,"answers",0,"Select Answers and Hints ")
+        newtext = utilities.replacemacro(newtext,"secstartCC",0,"Getting Started")
+        newtext = utilities.replacemacro(newtext,"seclisting",0,"Organized Listing")
+        newtext = utilities.replacemacro(newtext,"seccountingstepscases",0,"Counting with Steps and Cases")
+        newtext = utilities.replacemacro(newtext,"seccountingsubsets",0,"Counting Subsets")
+        newtext = utilities.replacemacro(newtext,"secbitstrings",0,"Counting Bit Strings")
+        newtext = utilities.replacemacro(newtext,"secgraphmodels",0,"Modeling with Graphs")
+        newtext = utilities.replacemacro(newtext,"secstdgraphs",0,"Standard Graphs and Representing Graphs")
+        newtext = utilities.replacemacro(newtext,"secgraphthy",0,"Graph Theory")
+        newtext = utilities.replacemacro(newtext,"secsubgraphiso",0,"Subgraphs and Isomorphic Graphs")
+        newtext = utilities.replacemacro(newtext,"secclassifygraphs",0,"Classifying Graphs")
+        newtext = utilities.replacemacro(newtext,"secintegerdivision",0,"Integer Division")
+        newtext = utilities.replacemacro(newtext,"secdivalg",0,"The Division Algorithm")
+        newtext = utilities.replacemacro(newtext,"secmodarith",0,"Excursion: Modular Arithmetic")
+        newtext = utilities.replacemacro(newtext,"secprimes",0,"Primes")
+        newtext = utilities.replacemacro(newtext,"secgcd",0,"Greatest Common Divisor")
+        newtext = utilities.replacemacro(newtext,"seclogicconn",0,"Logical Connectives")
+        newtext = utilities.replacemacro(newtext,"secquant",0,"Quantifiers")
+        newtext = utilities.replacemacro(newtext,"secifthen",0,"Conditional Statements")
+        newtext = utilities.replacemacro(newtext,"secconvcp",0,"Converse and Contrapositive")
+        newtext = utilities.replacemacro(newtext,"secinference",0,"Excursion: Equivalence and Inference")
+        newtext = utilities.replacemacro(newtext,"secfunctions",0,"Functions and Their Representations")
+        newtext = utilities.replacemacro(newtext,"secfnwords",0,"Functions with Rules Described in Words")
+        newtext = utilities.replacemacro(newtext,"seconetooneonto",0,"One-to-one and Onto")
+        newtext = utilities.replacemacro(newtext,"secperms",0,"Excursion: Permutations, Inverse Functions, and Uniqueness")
+        newtext = utilities.replacemacro(newtext,"secexplicitseq",0,"Explicitly-defined Sequences")
+        newtext = utilities.replacemacro(newtext,"secsets",0,"Sets") 
+        newtext = utilities.replacemacro(newtext,"secsubsets",0,"Subsets and Sets of Sets")
+        newtext = utilities.replacemacro(newtext,"secpartitions",0,"Excursion: Partitions")
+        newtext = utilities.replacemacro(newtext,"secrel",0,"Cartesian Products and Relations")
+        newtext = utilities.replacemacro(newtext,"secequivrel",0,"Equivalence Relations")
+        newtext = utilities.replacemacro(newtext,"secrecseq",0,"Recursively-defined Sequences")
+        newtext = utilities.replacemacro(newtext,"secmathind",0,"Mathematical Induction")
+        newtext = utilities.replacemacro(newtext,"secmatrix",0,"Excursion: Matrices and Finite Groups")
+        newtext = utilities.replacemacro(newtext,"secfibhigher",0,"The Fibonacci Sequence and Higher Order Recursions")
+        newtext = utilities.replacemacro(newtext,"secrecdefn",0,"Excursion: Recursively-defined Structures")
+        newtext = utilities.replacemacro(newtext,"secsumprod",0,"Modeling with Sums and Products")
+        newtext = utilities.replacemacro(newtext,"secbinhex",0,"Binary and Hexadecimal Representations")
+        newtext = utilities.replacemacro(newtext,"secsumconj",0,"Conjectures of Explicit Formulas for Sums and Products")
+        newtext = utilities.replacemacro(newtext,"secarithtriangle",0,"The Arithmetic Triangle")
+        newtext = utilities.replacemacro(newtext,"secsumproofs",0,"Proofs of Explicit Formulas for Sums and Products")
+
+
+    newtext = utilities.replacemacro(newtext,"Cref",1,"\\ref{#1}")
+
+    if component.writer.lower() in ["felix"]:
+        newtext = re.sub(r"\\textit{", r"\\term{",newtext)
+        newtext = re.sub(r"\[{\\normal.*?\]", r"",newtext)
+        print("processed felix")
+
+    if component.writer.lower() in ["cic"]:
+        newtext = re.sub(r"{\\bf ", r"\\term{",newtext)
+        newtext = re.sub(r"\\(begin|end){thicklines}","",newtext)
+        newtext = re.sub(r"<([0-9])",r"\\lt \1",newtext)
+        newtext = re.sub(r" \.0",r" 0.0",newtext)
+        newtext = re.sub(r" \.([0-9])",r" 0.\1",newtext)
+        newtext = re.sub(r"-\.([0-9])",r"-0.\1",newtext)
+        newtext = re.sub(r"page\~", "",newtext)
+        newtext = re.sub(r"\\enlargethispage\**{[^{}]*}", "",newtext)
+#        newtext = utilities.replacemacro(newtext,"numa",0,"")
+#        newtext = utilities.replacemacro(newtext,"num",0,"")
+#        newtext = utilities.replacemacro(newtext,"sub",0,"")
+        newtext = utilities.replacemacro(newtext,"mar",0,"\\cicmarginnote")
+        newtext = utilities.replacemacro(newtext,"aside",0,"\\cicmarginnote")
+        newtext = re.sub(r"\\cicmarginnote{([^}]+)}",
+                         no_double_backslash, newtext,0,re.DOTALL)
+        print("cic")
+
+    if component.writer.lower() in ["axler"]:
+        print("processing axler")
+
+        newtext = re.sub(r"\\begin{exercises}\s*(.*?)\s*\\end{exercises}",
+                         axler_exer, newtext,0,re.DOTALL)
+
+        newtext = re.sub(r"\\sindex\b", r"\\index",newtext)
+        newtext = re.sub(r"(\\index{[^{}]+})(}\s*{)", r"\2\1",newtext)
+        newtext = re.sub(r"(\\index{[^{}]+})(})", r"\2\1",newtext)
+        newtext = re.sub(r"\\1\b", r"{}",newtext)
+        newtext = re.sub(r"\\1_", r"{}_",newtext)
+        newtext = re.sub(r"\\3\b", r"{}",newtext)
+        newtext = re.sub(r"\\3_", r"{}_",newtext)
+        newtext = utilities.replacemacro(newtext,"la",0,"\\lambda")
+        newtext = utilities.replacemacro(newtext,"al",0,"\\alpha")
+        newtext = utilities.replacemacro(newtext,"textmd",1,"{#1}")
+        newtext = utilities.replacemacro(newtext,"emph",1,"\\term{#1}")
+        newtext = utilities.replacemacro(newtext,"textit",1,"\\em{#1}")
+        newtext = utilities.replacemacro(newtext,"marbf",1,"\\emph{#1}")
+        newtext = utilities.replacemacro(newtext,"br",1,"\\{ #1 \\}")
+        newtext = utilities.replacemacro(newtext,"paren",1,"( #1 )")
+        newtext = utilities.replacemacro(newtext,"norm",1,"\lVert #1 \rVert")
+        newtext = utilities.replacemacro(newtext,"abs",1,"\lvert #1 \rvert")
+        newtext = utilities.replacemacro(newtext,"ip",1,"\\langle #1 \\rangle")
+        newtext = utilities.replacemacro(newtext,"sbr",1," [#1] ")
+        newtext = utilities.replacemacro(newtext,"uppar",1," (#1) ")
+        newtext = utilities.replacemacro(newtext,"StandingBox",1,"\n\\begin{assumption}\n\\begin{itemize}\n#1\n\\end{itemize}\n\\end{assumption}\n")
+        newtext = re.sub(r"\\begin{example}\[([^\[\]]+)\]", r"\\examplelabel{\1}",newtext)
+        newtext = re.sub(r"\\begin{example}{", r"\\examplenolabel{",newtext)
+        newtext = utilities.replacemacro(newtext,"examplenolabel",1,"\\begin{example}[#1]")
+        newtext = utilities.replacemacro(newtext,"examplelabel",2,"\\begin{example}[#2]\\label{#1}")
+#        newtext = utilities.replacemacro(newtext,"beginexample",1,"\\begin{example}[#1]")
+        newtext = re.sub(r"\\ResultBox\[([^\[\]]+)\]", r"\\resultboxlabel{\1}",newtext)
+        newtext = utilities.replacemacro(newtext,"resultboxlabel",3,"\\begin{theorem}[#2]\n\\label{#1} #3\n\\end{theorem}")
+        newtext = utilities.replacemacro(newtext,"ResultBox",2,"\\begin{theorem}[#1]\n#2\n\\end{theorem}")
+        newtext = utilities.replacemacro(newtext,"NotationBox",2,"\\begin{principle}[#1]\n#2\n\\end{principle}")
+        newtext = re.sub(r"\\DefinitionBox\[([^\[\]]+)\]", r"\\Definitionboxlabel{\1}",newtext)
+        newtext = utilities.replacemacro(newtext,"Definitionboxlabel",3,"\\begin{definition}[#2]\n\\label{#1} #3\n\\end{definition}")
+        newtext = utilities.replacemacro(newtext,"DefinitionBox",2,"\\begin{definition}[#1]\n#2\n\\end{definition}")
+        newtext = utilities.replacemacro(newtext,"mar",1,"\\begin{aside}\n#1\n\\end{aside}")
+        newtext = utilities.replacemacro(newtext,"FigureHere",3,"<figure>\\FigureHereX{#1}{#2}{#3}</figure>")
+        newtext = utilities.replacemacro(newtext,"FigureHereCredit",5,"<figure>\\FigureHereCreditX{#1}{#2}{#3}{#5}</figure>")
+
+
+        newtext = re.sub(r"\\begin{subtheorem}\*", r"\\begin{itemize}",newtext)
+        newtext = re.sub(r"\\end{subtheorem}", r"\\end{itemize}",newtext)
+        newtext = re.sub(r"\\begin{SUBtheorem}", r"\\begin{enumerate}[label=(\alph)]",newtext)
+        newtext = re.sub(r"\\end{SUBtheorem}", r"\\end{enumerate}",newtext)
+
+        newtext = re.sub(r"\\exampleitemend", r"\n\n",newtext)
+        newtext = re.sub(r"\\exercisedisplayend", r"\n\n",newtext)
+        newtext = re.sub(r"\\/", r" ",newtext)
+        newtext = re.sub(r"\\,", r" ",newtext)
+
+        newtext = re.sub(r"{Itemize}", r"{itemize}",newtext)
+
+        newtext = re.sub(r"\\ifnum.*", r"",newtext)
+
+
     if component.writer.lower() in ["singalakha"]:
         newtext = re.sub(r"\\textbf{\s*Definition\s+[0-9.]+: ", r"\\sdefinition{",newtext)
         newtext = utilities.replacemacro(newtext,"sdefinition",1,"\\begin{definition}[#1]DeFiN")
@@ -277,9 +422,9 @@ def conversion_for_particular_authors(text):
         newtext = re.sub(r"\\definend",r"\\term", newtext)
 
     if component.writer.lower() in ["ernst"]:
-        newtext = re.sub(r"label=\\textrm{(\\alph\*)}",r"", newtext)
-        newtext = re.sub(r"\[label=\\rm{(\\alph\*)}\]",r"", newtext)
-        newtext = re.sub(r"\\textbf",r"\\term", newtext)
+        newtext = re.sub(r"\[label=\\rm{\(\\alph\*\)}\]",r"", newtext)
+        newtext = re.sub(r"label=\\textrm{\(\\alph\*\)}",r"", newtext)
+        newtext = re.sub(r"\\textbf",r"\\terminology", newtext)
         newtext = utilities.replacemacro(newtext,"tcboxmath",0,"")
 
     if component.writer.lower() in ["nlong"]:
@@ -2039,6 +2184,26 @@ def joefields_exer(txt):
     the_text = re.sub(r"^\s*\\end{exercise}", "", the_text)
 
     return r"\begin{exercises}" + "\n" + the_start + the_text + "\n" + r"\end{exercises}"
+
+def axler_exer(txt):
+        
+    the_text = txt.group(1)
+
+    the_text = re.sub(r"\\exercise\b", r"\\end{exercise}" + "\n\n" + r"\\begin{exercise}", the_text)
+
+    the_text = the_text + r"\end{exercise}"
+    the_text = re.sub(r"^\s*\\end{exercise}", "", the_text)
+
+    return r"\begin{exercises}" + "\n" + the_text + "\n" + r"\end{exercises}"
+
+def no_double_backslash(txt):
+        
+    the_text = txt.group(1)
+        
+    the_text = re.sub(r" *\\\\ *", r" ", the_text)
+
+    return r"\cicmarginnote{" + the_text + "}"
+    
 
 def item_to_tsk(txt):
 

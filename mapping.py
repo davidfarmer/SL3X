@@ -327,9 +327,8 @@ tex_to_html_characters = [
     [r"{\\oe}",r'œ'],
     [r"\\oe ",r'œ'],
     [r"\\oe\b",r'œ'],
-    [r"{\\(oe|OE|ae|AE)}",r'&\1lig;'],
-    [r"\\(oe|OE|ae|AE) ",r'&\1lig;'],
-    [r"\\(oe|OE|ae|AE)\b",r'&\1lig;']
+    [r"({\\ae}|\\ae |\\ae\b)",r'æ'],
+    [r"({\\AE}|\\AE |\\AE\b)",r'Æ']
     ]
 
 ########################

@@ -11,6 +11,7 @@ import codecs
 
 import component
 import dandr  # disassemble and reassemble
+import separatecomponents  # here only used to delete comments
 import processenvironments
 import makeoutput
 import utilities
@@ -72,6 +73,8 @@ except UnicodeDecodeError:
 
 component.documentcontents = dandr.initial_preparations(component.documentcontents)
 
+component.documentcontents = separatecomponents.killcomments(component.documentcontents)
+
 makeoutput.saveoutputfile("everything00.tex",component.documentcontents)
 # put the whole document into component.documentcontents
 dandr.expand_input_files()
@@ -80,7 +83,8 @@ dandr.expand_input_files()
 # all files are read in
 makeoutput.saveoutputfile("everything0.tex",component.documentcontents)
 
-component.documentcontents = dandr.initial_preparations(component.documentcontents)
+component.documentcontents = separatecomponents.killcomments(component.documentcontents)
+#component.documentcontents = dandr.initial_preparations(component.documentcontents)
 
 if r"\begin{document}" in component.documentcontents:
     makeoutput.setup_output_files()

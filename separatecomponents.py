@@ -157,6 +157,7 @@ def input_and_preprocess_a_file(txt, preprocess=True):
     if preprocess:
         logging.debug("preprocess, initial_preparations")
         newcontents = dandr.initial_preparations(newcontents)
+
 #    makeoutput.saveoutputfile("everything0b" + filestub + ".tex",newcontents)
 
 #    try:

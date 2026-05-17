@@ -324,6 +324,8 @@ def rescalesvg(file, scale=1.4):
 def latex_to_pdf(sourcefile, mode="latex"):
     """Convert latex file to pdf."""
 
+    convert_images = False;
+
     logging.debug("latex_to_pdf of %s", sourcefile)
     base_filename = sourcefile
 
@@ -355,11 +357,13 @@ def latex_to_pdf(sourcefile, mode="latex"):
 #              "pdfcrop " + outputfile_pdf + " " + outputfile_pdf + " > /dev/null")
 
     if mode == "latex":
+      if convert_images:
         os.system("latex -interaction batchmode -output-directory="+base_directory+" "+ startingfile_tex + " > /dev/null; "
               "cd " + base_directory + "; " + "dvips -q -Ppdf " + startingfile_stub+".dvi" + " -o " + startingfile_stub+".ps" + " > /dev/null" + "; "
               "ps2pdf " + startingfile_stub+".ps" + " " + startingfile_stub+".pdf" + "; "
               "pdfcrop " + startingfile_stub+".pdf" + " " + startingfile_stub+".pdf" + " > /dev/null")
     else:
+      if convert_images:
         os.system("cd " + base_directory + "; "
               "pdflatex -interaction batchmode " + startingfile_stub + ".tex > /dev/null;  "
               "pdfcrop " + startingfile_stub+".pdf" + " " + startingfile_stub+".pdf" + " > /dev/null")
@@ -1273,7 +1277,7 @@ def tex_to_html_other(text):
         return ""
 
     # hack for math mode.  rethink
-    thetext = replacemacro(thetext,"knownterminology",1,r'#1')
+#    thetext = replacemacro(thetext,"knownterminology",1,r'#1')
 
     if component.target == 'html':
         thetext = re.sub(r"\\url\{([^{}]+)\}",r'<a href="\1">\1</a>',thetext)

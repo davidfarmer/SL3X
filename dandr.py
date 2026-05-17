@@ -550,6 +550,7 @@ def process_separated_environments():
     '''
 
     logging.info("initial processing of minipage, tikz, images, etc")
+    convert_images = False;
 
     for sha1key in list(component.environment.keys()):
         if component.environment[sha1key]['marker'] == "minipage":
@@ -591,16 +592,17 @@ def process_separated_environments():
             theoldtext = re.sub(r"^\s*\\vskip.*", "", theoldtext)
 
         # maybe these could be "elif"s, but no harm to try them all
-            if r"\figureinput" in theoldtext:
-                theoldtext = utilities.re_convert_image(theoldtext)
-            if r"\includegraphics" in theoldtext and r"\labellist" in theoldtext:
-                theoldtext = utilities.re_convert_image(theoldtext)
-            if r"\includegraphics" in theoldtext and r"\put(" in theoldtext:
-                theoldtext = utilities.re_convert_image(theoldtext)
-            if r"\includegraphics" in theoldtext and r"\psfrag" in theoldtext:
-                theoldtext = utilities.re_convert_image(theoldtext)
-            if r"\begin{overpic}" in theoldtext:
-                theoldtext = utilities.re_convert_image(theoldtext)
+            if convert_images:
+              if r"\figureinput" in theoldtext:
+                  theoldtext = utilities.re_convert_image(theoldtext)
+              if r"\includegraphics" in theoldtext and r"\labellist" in theoldtext:
+                  theoldtext = utilities.re_convert_image(theoldtext)
+              if r"\includegraphics" in theoldtext and r"\put(" in theoldtext:
+                  theoldtext = utilities.re_convert_image(theoldtext)
+              if r"\includegraphics" in theoldtext and r"\psfrag" in theoldtext:
+                  theoldtext = utilities.re_convert_image(theoldtext)
+              if r"\begin{overpic}" in theoldtext:
+                  theoldtext = utilities.re_convert_image(theoldtext)
 
 # temporary, gatehr some information
         if component.environment[sha1key]['marker'] == "figure":
@@ -615,7 +617,8 @@ def process_separated_environments():
             the_parent = component.environment[sha1key]['parent']
             if component.environment[the_parent]['marker'] != 'figure':
                 logging.info("re-converting image %s", theoldtext[:50])
-                theoldtext = utilities.re_convert_image("\\begin{picture}\n" + theoldtext + "\n\\end{picture}\n")
+                if convert_images:
+                  theoldtext = utilities.re_convert_image("\\begin{picture}\n" + theoldtext + "\n\\end{picture}\n")
             else:
                 logging.info("skipping picture %s because it is in figure %s", theoldtext[:50], the_parent)
                 component.environment[sha1key]['component_separated'] = theoldtext

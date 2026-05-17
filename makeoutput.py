@@ -2322,6 +2322,7 @@ def chapter_section_files():
             this_page = postprocess.fix_various_tags(this_page)
 
             if component.target == 'ptx':
+                this_page = postprocess.math_in_titles(this_page)
                 this_page = postprocess.ptx_change_figure_wrapping(this_page)
                 this_page = postprocess.ptx_fix_various_tags(this_page)
                 this_page = postprocess.ptx_fix_answer(this_page)

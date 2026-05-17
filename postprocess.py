@@ -6,6 +6,29 @@ import logging
 import utilities
 import component
 
+def math_in_titles(text):
+
+    thetext = text
+
+    thetext = re.sub(r"(<title>)\s*(.*?)\s*(</title>)",
+                          math_in_ti, thetext)
+
+    return thetext
+
+def math_in_ti(txt):
+
+    thestart = txt.group(1)
+    thetext = txt.group(2)
+    theend = txt.group(3)
+
+    thetext = re.sub(r"(^| )\$([^\$]+)\$( |$)", r"\1<m>\2</m>\3", thetext)
+#    thetext = re.sub(r"\\\(", r"<m>", thetext)
+#    thetext = re.sub(r"\\\)", r"</m>", thetext)
+#    thetext = re.sub(r"\$", r"<m>", thetext)
+#    thetext = re.sub(r"\$", r"</m>", thetext)
+
+    return thestart + thetext + theend
+
 def ptx_minipage_sidebyside(text):
     """ Two successive sidebyside's  are just one big sidebyside.
         A hack to take care of minipage nonsense.
@@ -339,6 +362,7 @@ def ptx_fix_various_tags(text):  # not including particular authors
     the_text = re.sub(r"\\dollar\b", "$", the_text)
     the_text = re.sub("<ampersand */>", "&amp;", the_text)
 
+    the_text = utilities.replacemacro(the_text,"em",1, r'<emph>#1</emph>')
     the_text = utilities.replacemacro(the_text,"code",1, r'<c>#1</c>')
     the_text = utilities.replacemacro(the_text,"terminology",1, r'<term>#1</term>')
     the_text = utilities.replacemacro(the_text,"term",1, r'<term>#1</term>')
@@ -474,6 +498,11 @@ def ptx_fix_particular_author(text):  # including particular authors
 
     if component.writer.lower() in ["monaco"]:
         the_text = re.sub(r'\\dollar', r'$', the_text)
+
+    the_text = re.sub(r'<h>([^<@]+)@', r'<h sortby="\1">', the_text)
+    if component.writer.lower() in ["axler"]:
+        the_text = utilities.replacemacro(the_text,"FigureHereX", 3, r'<caption>#3</caption><image source="AaBbCcDd.png"><description>Missing description</description></image>')
+        the_text = utilities.replacemacro(the_text,"FigureHereCreditX", 4, r'<caption>#3</caption><image source="AaBbCcDd.png"><description>Missing description</description><credit>#4</credit></image>')
 
     if component.writer.lower() in ["pantano"]:
         the_text = re.sub(r'{\\terminology', r'{\\mathbf', the_text)
